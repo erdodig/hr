@@ -1,14 +1,19 @@
 spring:
   profiles:
     active: smart
+    
 hr:
   employee:
     def:
       percent: 10
-    smart:
-      limit10: 10
-      percent10: 10
-      limit5: 5
-      percent5: 5
-      limit2: 2.5
-      percent2: 2
+      
+    smarts:
+     -
+      limit: 5
+      percent: 5
+     -
+      limit: 2.5
+      percent: 2
+     -
+      limit: 10
+      percent: 10

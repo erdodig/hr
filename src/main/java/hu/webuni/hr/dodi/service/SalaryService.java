@@ -11,10 +11,6 @@ public class SalaryService {
 	@Autowired
 	private EmployeeService employeeService;
 
-//	public SalaryService(EmployeeService employeeService) {
-//		this.employeeService = employeeService;
-//	}
-
 	public int getPayRaisePercent(Employee employee) {
 		return employeeService.getPayRaisePercent(employee);
 	}

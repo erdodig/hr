@@ -23,17 +23,17 @@ public class HrApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		System.out.println(salaryService.getPayRaisePercent(
-				new Employee(LocalDateTime.of(2010, 2, 13, 8, 0))));
-		
-		System.out.println(salaryService.getPayRaisePercent(
+		System.out.println("Zoli: " + salaryService.getPayRaisePercent(
 				new Employee(LocalDateTime.of(2017, 2, 13, 8, 0))));
 		
-		System.out.println(salaryService.getPayRaisePercent(
-				new Employee(LocalDateTime.of(2020, 6, 13, 8, 0))));
+		System.out.println("Kata: " + salaryService.getPayRaisePercent(
+				new Employee(LocalDateTime.of(2010, 2, 13, 8, 0))));
 		
-		System.out.println(salaryService.getPayRaisePercent(
-				new Employee(LocalDateTime.of(2020, 4, 13, 8, 0))));
+		System.out.println("Peti: " + salaryService.getPayRaisePercent(
+				new Employee(LocalDateTime.of(2021, 8, 13, 8, 0))));
+		
+		System.out.println("Flóra: " + salaryService.getPayRaisePercent(
+				new Employee(LocalDateTime.of(2020, 6, 13, 8, 0))));
 	}
 
 }

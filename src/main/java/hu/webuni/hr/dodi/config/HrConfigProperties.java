@@ -1,5 +1,10 @@
 package hu.webuni.hr.dodi.config;
 
+import java.util.Comparator;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +13,11 @@ import org.springframework.stereotype.Component;
 public class HrConfigProperties {
 
 	Employee employee = new Employee();
+	
+	@PostConstruct
+	private void sorting() {
+		employee.getSmarts().sort(Comparator.comparing(Smart::getLimit).reversed());
+	}
 
 	public Employee getEmployee() {
 		return employee;
@@ -21,7 +31,7 @@ public class HrConfigProperties {
 		
 		private Def def = new Def();
 		
-		private Smart smart = new Smart();
+		private List<Smart> smarts;
 
 		public Def getDef() {
 			return def;
@@ -31,12 +41,12 @@ public class HrConfigProperties {
 			this.def = def;
 		}
 
-		public Smart getSmart() {
-			return smart;
+		public List<Smart> getSmarts() {
+			return smarts;
 		}
 
-		public void setSmart(Smart smart) {
-			this.smart = smart;
+		public void setSmarts(List<Smart> smarts) {
+			this.smarts = smarts;
 		}
 		
 	}
@@ -57,66 +67,26 @@ public class HrConfigProperties {
 	
 	public static class Smart {
 		
-		private int limit10;
+		private int limit;
 		
-		private int percent10;
-		
-		private int limit5;
-		
-		private int percent5;
-		
-		private double limit2;
-		
-		private int percent2;
+		private int percent;
 
-		public int getLimit10() {
-			return limit10;
+		public int getLimit() {
+			return limit;
 		}
 
-		public void setLimit10(int limit10) {
-			this.limit10 = limit10;
+		public void setLimit(int limit) {
+			this.limit = limit;
 		}
 
-		public int getPercent10() {
-			return percent10;
+		public int getPercent() {
+			return percent;
 		}
 
-		public void setPercent10(int percent10) {
-			this.percent10 = percent10;
+		public void setPercent(int percent) {
+			this.percent = percent;
 		}
 
-		public int getLimit5() {
-			return limit5;
-		}
-
-		public void setLimit5(int limit5) {
-			this.limit5 = limit5;
-		}
-
-		public int getPercent5() {
-			return percent5;
-		}
-
-		public void setPercent5(int percent5) {
-			this.percent5 = percent5;
-		}
-
-		public double getLimit2() {
-			return limit2;
-		}
-
-		public void setLimit2(double limit2) {
-			this.limit2 = limit2;
-		}
-
-		public int getPercent2() {
-			return percent2;
-		}
-
-		public void setPercent2(int percent2) {
-			this.percent2 = percent2;
-		}
-		
 	}
 	
 }
