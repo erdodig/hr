@@ -1,8 +1,8 @@
-package hu.webuni.hr.dodi.model;
+package hu.webuni.hr.dodi.dto;
 
 import java.time.LocalDateTime;
 
-public class Employee {
+public class EmployeeDto {
 
 	private Long id;
 	
@@ -14,14 +14,10 @@ public class Employee {
 	
 	private LocalDateTime startOfWork;
 
-	public Employee() {
+	public EmployeeDto() {
 	}
 
-	public Employee(LocalDateTime startOfWork) {
-		this.startOfWork = startOfWork;
-	}
-
-	public Employee(Long id, String name, String job, int salary, LocalDateTime startOfWork) {
+	public EmployeeDto(Long id, String name, String job, int salary, LocalDateTime startOfWork) {
 		this.id = id;
 		this.name = name;
 		this.job = job;
@@ -68,5 +64,5 @@ public class Employee {
 	public void setStartOfWork(LocalDateTime startOfWork) {
 		this.startOfWork = startOfWork;
 	}
-		
+	
 }
