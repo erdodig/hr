@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>HR employee management</title>
+</head>
+<body>
+
+	<h1>List of companies</h1>
+	
+	<ul>
+		<li th:each="company : ${companies}">
+			<span th:text="${company.id}">id</span>
+			<a th:text="${company.companyName}" th:href="@{/company(id=${company.id})}">companyName</a>
+			<span th:text="${company.companyRegistrationNumber}">companyRegistrationNumber</span>
+			<span th:text="${company.companyAddress}">companyAddress</span>
+			<a th:href="@{/companies(id=${company.id})}">delete</a>
+			<ul>
+				<li th:each="employee : ${company.employeeDtos}">
+					<span th:text="${employee.id}">id</span>
+					<a th:text="${employee.name}">name</a>
+					<span th:text="${employee.job}">job</span>
+					<span th:text="${employee.salary}">salary</span>
+					<span th:text="${employee.startOfWork}">startOfWork</span>
+					<a th:href="@{/employees(id=${employee.id})}">delete</a>
+				</li>
+			</ul>
+	</ul>
+	
+	<form th:action="@{/companies}" method="post" th:object="${newCompany}">
+		Id: <input th:field="*{id}" /> <br/>
+		Name: <input th:field="*{companyName}" /> <br/>
+		Job: <input th:field="*{companyRegistrationNumber}" /> <br/>
+		Salary: <input th:field="*{companyAddress}" /> <br/>
+		<input type="submit" value="Add" />
+	</form>
+	
+</body>
+</html>

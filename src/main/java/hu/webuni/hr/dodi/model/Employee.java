@@ -68,5 +68,11 @@ public class Employee {
 	public void setStartOfWork(LocalDateTime startOfWork) {
 		this.startOfWork = startOfWork;
 	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", job=" + job + ", salary=" + salary + ", startOfWork="
+				+ startOfWork + "]";
+	}
 		
 }

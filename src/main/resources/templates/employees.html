@@ -11,10 +11,11 @@
 	<ul>
 		<li th:each="employee : ${employees}">
 			<span th:text="${employee.id}">id</span>
-			<span th:text="${employee.name}">name</span>
+			<a th:text="${employee.name}" th:href="@{/employee(id=${employee.id})}">name</a>
 			<span th:text="${employee.job}">job</span>
 			<span th:text="${employee.salary}">salary</span>
 			<span th:text="${employee.startOfWork}">startOfWork</span>
+			<a th:href="@{/employees(id=${employee.id})}">delete</a>
 		</li>
 	</ul>
 	
