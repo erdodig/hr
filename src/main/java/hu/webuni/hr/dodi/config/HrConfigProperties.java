@@ -1,9 +1,8 @@
 package hu.webuni.hr.dodi.config;
 
-import java.util.Comparator;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -12,47 +11,40 @@ import org.springframework.stereotype.Component;
 @Component
 public class HrConfigProperties {
 
-	Employee employee = new Employee();
-	
-	@PostConstruct
-	private void sorting() {
-		employee.getSmarts().sort(Comparator.comparing(Smart::getLimit).reversed());
+	private Salary salary = new Salary();
+
+	public Salary getSalary() {
+		return salary;
 	}
 
-	public Employee getEmployee() {
-		return employee;
+	public void setSalary(Salary salary) {
+		this.salary = salary;
 	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-	
-	public static class Employee {
-		
-		private Def def = new Def();
-		
-		private List<Smart> smarts;
+	public static class Salary {
 
-		public Def getDef() {
+		private Default def = new Default();
+		private Smart smart = new Smart();
+
+		public Default getDef() {
 			return def;
 		}
 
-		public void setDef(Def def) {
+		public void setDef(Default def) {
 			this.def = def;
 		}
 
-		public List<Smart> getSmarts() {
-			return smarts;
+		public Smart getSmart() {
+			return smart;
 		}
 
-		public void setSmarts(List<Smart> smarts) {
-			this.smarts = smarts;
+		public void setSmart(Smart smart) {
+			this.smart = smart;
 		}
-		
+
 	}
-	
-	public static class Def {
-	
+
+	public static class Default {
 		private int percent;
 
 		public int getPercent() {
@@ -62,31 +54,76 @@ public class HrConfigProperties {
 		public void setPercent(int percent) {
 			this.percent = percent;
 		}
-		
 	}
-	
+
 	public static class Smart {
 		
-		private int limit;
+		private Double limit1;
+		private Double limit2;
+		private Double limit3;
+		private Integer percent1;
+		private Integer percent2;
+		private Integer percent3;
 		
-		private int percent;
-
-		public int getLimit() {
-			return limit;
+		
+		private TreeMap<Double, Integer> limits;
+		
+		public Double getLimit1() {
+			return limit1;
 		}
 
-		public void setLimit(int limit) {
-			this.limit = limit;
+		public void setLimit1(Double limit1) {
+			this.limit1 = limit1;
 		}
 
-		public int getPercent() {
-			return percent;
+		public Double getLimit2() {
+			return limit2;
 		}
 
-		public void setPercent(int percent) {
-			this.percent = percent;
+		public void setLimit2(Double limit2) {
+			this.limit2 = limit2;
+		}
+
+		public Double getLimit3() {
+			return limit3;
+		}
+
+		public void setLimit3(Double limit3) {
+			this.limit3 = limit3;
+		}
+		
+		public Integer getPercent1() {
+			return percent1;
+		}
+
+		public void setPercent1(Integer percent1) {
+			this.percent1 = percent1;
+		}
+
+		public Integer getPercent2() {
+			return percent2;
+		}
+
+		public void setPercent2(Integer percent2) {
+			this.percent2 = percent2;
+		}
+
+		public Integer getPercent3() {
+			return percent3;
+		}
+
+		public void setPercent3(Integer percent3) {
+			this.percent3 = percent3;
+		}
+
+		public TreeMap<Double, Integer> getLimits() {
+			return limits;
+		}
+
+		public void setLimits(TreeMap<Double, Integer> limits) {
+			this.limits = limits;
 		}
 
 	}
-	
+
 }

@@ -8,14 +8,13 @@ import hu.webuni.hr.dodi.model.Employee;
 
 @Service
 public class DefaultEmployeeService implements EmployeeService {
-
+	
 	@Autowired
 	HrConfigProperties config;
-	
+
 	@Override
 	public int getPayRaisePercent(Employee employee) {
-		
-		return config.getEmployee().getDef().getPercent();
+		return config.getSalary().getDef().getPercent();
 	}
 
 }

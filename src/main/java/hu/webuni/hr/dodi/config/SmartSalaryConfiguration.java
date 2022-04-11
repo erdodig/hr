@@ -9,10 +9,10 @@ import hu.webuni.hr.dodi.service.SmartEmployeeService;
 
 @Configuration
 @Profile("smart")
-public class SmartEmployeeConfiguration {
+public class SmartSalaryConfiguration {
 
 	@Bean
-	EmployeeService employeeService( ) {
+	public EmployeeService employeeService() {
 		return new SmartEmployeeService();
 	}
 }

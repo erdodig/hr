@@ -2,68 +2,63 @@ package hu.webuni.hr.dodi.web;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import hu.webuni.hr.dodi.model.Employee;
 
 @Controller
 public class EmployeeTLController {
-	
+
 	private List<Employee> allEmployees = new ArrayList<>();
 	
 	{
-		allEmployees.add(new Employee(1L, "Meta Flóra", "Secretary", 350000, LocalDateTime.now()));
-		allEmployees.add(new Employee(2L, "Para Zita", "Teacher", 380000, LocalDateTime.now()));
-		allEmployees.add(new Employee(3L, "Ebéd Elek", "Director", 420000, LocalDateTime.now()));
+		allEmployees.add(new Employee(1L, "Kis Gábor", "osztályvezető", 100000, LocalDateTime.of(2012, 1, 1, 8, 0, 0)));
 	}
 
-	@GetMapping("/")
-	public String home() {
-		return "index";
-	}
-	
 	@GetMapping("/employees")
-	public String listEmlpoyees(@RequestParam(required = false) Long id, Map<String, Object> model) {
-		
-		if (id != null)			
-			allEmployees.remove(allEmployees.indexOf(allEmployees.stream().filter(c -> c.getId().equals(id)).findFirst().get()));
-			
+	public String listEmployees(Map<String, Object> model) {
 		model.put("employees", allEmployees);
 		model.put("newEmployee", new Employee());
-		
 		return "employees";
 	}
 	
-	@PostMapping("/employees")
-	public String addEmployee(Employee newEmployee) {
+	@GetMapping("/employees/{id}")
+	public String editEmployee(@PathVariable long id, Map<String, Object> model) {
+		Employee selectedEmployee = allEmployees.stream()
+				.filter(e -> e.getEmployeeId().equals(id)).findFirst().get();
+		model.put("employee", selectedEmployee);
+		return "editEmployee";
+	}
 
-		if (allEmployees.stream().filter(c -> c.getId().equals(newEmployee.getId())).findFirst().isPresent()) {
-			
-			allEmployees.set(
-					allEmployees.indexOf(allEmployees.stream().filter(c -> c.getId().equals(newEmployee.getId())).findFirst().get()),
-					newEmployee);
-			
-		} else { 	
-			
-			newEmployee.setStartOfWork(LocalDateTime.now());
-			allEmployees.add(newEmployee);
-		}
-		
+	@PostMapping("/employees")
+	public String addEmployee(Employee employee) {
+		allEmployees.add(employee);
 		return "redirect:employees";
 	}
 	
-	@GetMapping("/employee")
-	public String modifyEmployee(@RequestParam Long id, Map<String, Object> model) {
-		model.put("modEmployee", allEmployees.stream().filter(c -> c.getId().equals(id)).findFirst().get());
-		return "employee";
+	@GetMapping("/deleteEmployee/{id}")
+	public String deleteEmployee(@PathVariable long id) {
+		allEmployees.removeIf(e -> e.getEmployeeId().equals(id));
+		return "redirect:/employees";
 	}
 	
+	@PostMapping("/updateEmployee")
+	public String updateEmployee(Employee employee) {
+		for(int i=0; i< allEmployees.size(); i++) {
+			if(allEmployees.get(i).getEmployeeId().equals(employee.getEmployeeId())) {
+				allEmployees.set(i, employee);
+				break;
+			}
+		}
+		
+		
+		return "redirect:employees";
+	}
+
 }

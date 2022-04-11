@@ -4,5 +4,5 @@ import hu.webuni.hr.dodi.model.Employee;
 
 public interface EmployeeService {
 
-	public int getPayRaisePercent(Employee employee);
+	int getPayRaisePercent(Employee employee);
 }

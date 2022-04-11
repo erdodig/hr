@@ -4,37 +4,34 @@ import java.time.LocalDateTime;
 
 public class Employee {
 
-	private Long id;
-	
+	private Long employeeId;
 	private String name;
-	
-	private String job;
-	
+	private String jobTitle;
 	private int salary;
+	private LocalDateTime dateOfStartWork;
 	
-	private LocalDateTime startOfWork;
-
 	public Employee() {
 	}
 
-	public Employee(LocalDateTime startOfWork) {
-		this.startOfWork = startOfWork;
-	}
-
-	public Employee(Long id, String name, String job, int salary, LocalDateTime startOfWork) {
-		this.id = id;
+	public Employee(Long employeeId, String name, String jobTitle, int salary, LocalDateTime dateOfStartWork) {
+		this.employeeId = employeeId;
 		this.name = name;
-		this.job = job;
+		this.jobTitle = jobTitle;
 		this.salary = salary;
-		this.startOfWork = startOfWork;
+		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	public Long getId() {
-		return id;
+	public Employee(int salary, LocalDateTime dateOfStartWork) {
+		this.salary = salary;
+		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Long getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
 	}
 
 	public String getName() {
@@ -45,12 +42,12 @@ public class Employee {
 		this.name = name;
 	}
 
-	public String getJob() {
-		return job;
+	public String getJobTitle() {
+		return jobTitle;
 	}
 
-	public void setJob(String job) {
-		this.job = job;
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
 	}
 
 	public int getSalary() {
@@ -61,18 +58,12 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public LocalDateTime getStartOfWork() {
-		return startOfWork;
+	public LocalDateTime getDateOfStartWork() {
+		return dateOfStartWork;
 	}
 
-	public void setStartOfWork(LocalDateTime startOfWork) {
-		this.startOfWork = startOfWork;
+	public void setDateOfStartWork(LocalDateTime dateOfStartWork) {
+		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	@Override
-	public String toString() {
-		return "Employee [id=" + id + ", name=" + name + ", job=" + job + ", salary=" + salary + ", startOfWork="
-				+ startOfWork + "]";
-	}
-		
 }

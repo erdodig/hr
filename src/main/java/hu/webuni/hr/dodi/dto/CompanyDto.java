@@ -3,35 +3,39 @@ package hu.webuni.hr.dodi.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyDto {
+import com.fasterxml.jackson.annotation.JsonView;
 
+
+public class CompanyDto {
+	
+	@JsonView(View.BaseData.class)
 	private Long id;
 	
-	private String companyRegistrationNumber;
+	@JsonView(View.BaseData.class)
+	private int registrationNumber;
 	
-	private String companyName;
+	@JsonView(View.BaseData.class)
+	private String name;
 	
-	private String companyAddress;
+	@JsonView(View.BaseData.class)
+	private String address;
 	
-	private List<EmployeeDto> employeeDtos = new ArrayList<>();
-
+	private List<EmployeeDto> employees = new ArrayList<>();
+	
 	public CompanyDto() {
+		
 	}
 
-	public CompanyDto(Long id, String companyRegistrationNumber, String companyName, String companyAddress) {
+	public CompanyDto(Long id, int registrationNumber, String name, String adress, List<EmployeeDto> employees) {
 		this.id = id;
-		this.companyRegistrationNumber = companyRegistrationNumber;
-		this.companyName = companyName;
-		this.companyAddress = companyAddress;
+		this.registrationNumber = registrationNumber;
+		this.name = name;
+		this.address = adress;
+		this.employees = employees;
 	}
 
-	public CompanyDto(Long id, String companyRegistrationNumber, String companyName, String companyAddress,
-			List<EmployeeDto> employeeDtos) {
-		this.id = id;
-		this.companyRegistrationNumber = companyRegistrationNumber;
-		this.companyName = companyName;
-		this.companyAddress = companyAddress;
-		this.employeeDtos = employeeDtos;
+	public int getRegistrationNumber() {
+		return registrationNumber;
 	}
 
 	public Long getId() {
@@ -42,36 +46,32 @@ public class CompanyDto {
 		this.id = id;
 	}
 
-	public String getCompanyRegistrationNumber() {
-		return companyRegistrationNumber;
+	public void setRegistrationNumber(int registrationNumber) {
+		this.registrationNumber = registrationNumber;
 	}
 
-	public void setCompanyRegistrationNumber(String companyRegistrationNumber) {
-		this.companyRegistrationNumber = companyRegistrationNumber;
+	public String getName() {
+		return name;
 	}
 
-	public String getCompanyName() {
-		return companyName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public String getAddress() {
+		return address;
 	}
 
-	public String getCompanyAddress() {
-		return companyAddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public void setCompanyAddress(String companyAddress) {
-		this.companyAddress = companyAddress;
+	public List<EmployeeDto> getEmployees() {
+		return employees;
 	}
 
-	public List<EmployeeDto> getEmployeeDtos() {
-		return employeeDtos;
+	public void setEmployees(List<EmployeeDto> employees) {
+		this.employees = employees;
 	}
 
-	public void setEmployeeDtos(List<EmployeeDto> employeeDtos) {
-		this.employeeDtos = employeeDtos;
-	}	
-	
 }

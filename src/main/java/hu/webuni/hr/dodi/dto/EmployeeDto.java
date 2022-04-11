@@ -3,33 +3,29 @@ package hu.webuni.hr.dodi.dto;
 import java.time.LocalDateTime;
 
 public class EmployeeDto {
-
-	private Long id;
-	
+	private long id;
 	private String name;
-	
-	private String job;
-	
+	private String title;
 	private int salary;
-	
-	private LocalDateTime startOfWork;
+	private LocalDateTime entryDate;
 
 	public EmployeeDto() {
+
 	}
 
-	public EmployeeDto(Long id, String name, String job, int salary, LocalDateTime startOfWork) {
+	public EmployeeDto(long id, String name, String title, int salary, LocalDateTime entryDate) {
 		this.id = id;
 		this.name = name;
-		this.job = job;
+		this.title = title;
 		this.salary = salary;
-		this.startOfWork = startOfWork;
+		this.entryDate = entryDate;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -41,12 +37,12 @@ public class EmployeeDto {
 		this.name = name;
 	}
 
-	public String getJob() {
-		return job;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setJob(String job) {
-		this.job = job;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public int getSalary() {
@@ -57,12 +53,18 @@ public class EmployeeDto {
 		this.salary = salary;
 	}
 
-	public LocalDateTime getStartOfWork() {
-		return startOfWork;
+	public LocalDateTime getEntryDate() {
+		return entryDate;
 	}
 
-	public void setStartOfWork(LocalDateTime startOfWork) {
-		this.startOfWork = startOfWork;
+	public void setEntryDate(LocalDateTime entryDate) {
+		this.entryDate = entryDate;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", title=" + title + ", salary=" + salary + ", entryDate="
+				+ entryDate + "]";
+	}
+
 }
