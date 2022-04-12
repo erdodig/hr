@@ -1,4 +1,4 @@
-package hu.webuni.hr.csuka100;
+package hu.webuni.hr.dodi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

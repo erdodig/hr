@@ -31,7 +31,7 @@ public class EmployeeTLController {
 	@GetMapping("/employees/{id}")
 	public String editEmployee(@PathVariable long id, Map<String, Object> model) {
 		Employee selectedEmployee = allEmployees.stream()
-				.filter(e -> e.getEmployeeId().equals(id)).findFirst().get();
+				.filter(e -> e.getId().equals(id)).findFirst().get();
 		model.put("employee", selectedEmployee);
 		return "editEmployee";
 	}
@@ -44,14 +44,14 @@ public class EmployeeTLController {
 	
 	@GetMapping("/deleteEmployee/{id}")
 	public String deleteEmployee(@PathVariable long id) {
-		allEmployees.removeIf(e -> e.getEmployeeId().equals(id));
+		allEmployees.removeIf(e -> e.getId().equals(id));
 		return "redirect:/employees";
 	}
 	
 	@PostMapping("/updateEmployee")
 	public String updateEmployee(Employee employee) {
 		for(int i=0; i< allEmployees.size(); i++) {
-			if(allEmployees.get(i).getEmployeeId().equals(employee.getEmployeeId())) {
+			if(allEmployees.get(i).getId().equals(employee.getId())) {
 				allEmployees.set(i, employee);
 				break;
 			}

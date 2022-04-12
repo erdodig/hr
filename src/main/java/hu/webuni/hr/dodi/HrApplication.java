@@ -33,8 +33,7 @@ public class HrApplication implements CommandLineRunner {
 		
 		Smart smartConfig = config.getSalary().getSmart();
 		for (Double limit : 
-				smartConfig.getLimits().keySet()
-			/*Arrays.asList(smartConfig.getLimit1(), smartConfig.getLimit2(), smartConfig.getLimit3())*/) {
+				smartConfig.getLimits().keySet()) {
 			
 			int origSalary = 100;
 			LocalDateTime limitDay = LocalDateTime.now().minusDays((long)(limit*365));

@@ -2,36 +2,48 @@ package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+
 public class Employee {
 
-	private Long employeeId;
+	private Long id;
+	
+	@NotEmpty
 	private String name;
-	private String jobTitle;
+	
+	@NotEmpty
+	private String title;
+	
+	@Min(value = 0)
 	private int salary;
-	private LocalDateTime dateOfStartWork;
+	
+	@Past
+	private LocalDateTime entryDate;
 	
 	public Employee() {
 	}
 
-	public Employee(Long employeeId, String name, String jobTitle, int salary, LocalDateTime dateOfStartWork) {
-		this.employeeId = employeeId;
+	public Employee(Long id, String name, String title, int salary, LocalDateTime entryDate) {
+		this.id = id;
 		this.name = name;
-		this.jobTitle = jobTitle;
+		this.title = title;
 		this.salary = salary;
-		this.dateOfStartWork = dateOfStartWork;
+		this.entryDate = entryDate;
 	}
 
-	public Employee(int salary, LocalDateTime dateOfStartWork) {
+	public Employee(int salary, LocalDateTime entryDate) {
 		this.salary = salary;
-		this.dateOfStartWork = dateOfStartWork;
+		this.entryDate = entryDate;
 	}
 
-	public Long getEmployeeId() {
-		return employeeId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -42,12 +54,12 @@ public class Employee {
 		this.name = name;
 	}
 
-	public String getJobTitle() {
-		return jobTitle;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public int getSalary() {
@@ -58,12 +70,12 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public LocalDateTime getDateOfStartWork() {
-		return dateOfStartWork;
+	public LocalDateTime getEntryDate() {
+		return entryDate;
 	}
 
-	public void setDateOfStartWork(LocalDateTime dateOfStartWork) {
-		this.dateOfStartWork = dateOfStartWork;
+	public void setEntryDate(LocalDateTime entryDate) {
+		this.entryDate = entryDate;
 	}
 
 }

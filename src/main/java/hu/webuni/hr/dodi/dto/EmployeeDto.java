@@ -1,12 +1,26 @@
 package hu.webuni.hr.dodi.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
 
 public class EmployeeDto {
+	
 	private long id;
+	
+	@NotEmpty
 	private String name;
+	
+	@NotEmpty
 	private String title;
+	
+	@Min(value = 0)
 	private int salary;
+	
+	@Past
 	private LocalDateTime entryDate;
 
 	public EmployeeDto() {
@@ -65,6 +79,23 @@ public class EmployeeDto {
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", title=" + title + ", salary=" + salary + ", entryDate="
 				+ entryDate + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmployeeDto other = (EmployeeDto) obj;
+		return id == other.id;
 	}
 
 }
