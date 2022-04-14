@@ -22,7 +22,7 @@ public class SmartEmployeeService extends AbstractEmployeeService {
 	@Override
 	public int getPayRaisePercent(Employee employee) {
 		
-		double yearsWorked = ChronoUnit.DAYS.between(employee.getEntryDate(), LocalDateTime.now()) / 365.0;
+		double yearsWorked = ChronoUnit.DAYS.between(employee.getDateOfStartWork(), LocalDateTime.now()) / 365.0;
 		
 		Smart smartConfig = config.getSalary().getSmart();
 		
