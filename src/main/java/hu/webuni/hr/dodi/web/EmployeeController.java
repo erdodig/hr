@@ -101,7 +101,7 @@ public class EmployeeController {
 		}
 	}
 	
-	@PutMapping("/{jobtitle}")
+	@PutMapping("/{nameStart}")
 	public ResponseEntity<List<EmployeeDto>> getByNameStartingWithIgnoreCase(@PathVariable String name) {
 		
 		List<Employee> employees = employeeRepository.findByNameStartingWithIgnoreCase(name);
@@ -116,7 +116,7 @@ public class EmployeeController {
 		}
 	}
 	
-	@PutMapping("/{jobtitle}")
+	@PutMapping("/{workBetween}")
 	public ResponseEntity<List<EmployeeDto>> getByDateOfStartWorkBetween(@PathVariable LocalDateTime start, 
 				@PathVariable LocalDateTime end) {
 		
