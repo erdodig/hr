@@ -7,9 +7,9 @@ import hu.webuni.hr.dodi.model.Employee;
 @Service
 public class SalaryService {
 
-	private EmployeeService employeeService;
+	private AbstractEmployeeService employeeService;
 
-	public SalaryService(EmployeeService employeeService) {
+	public SalaryService(AbstractEmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
 

@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import hu.webuni.hr.dodi.service.EmployeeService;
+import hu.webuni.hr.dodi.service.AbstractEmployeeService;
 import hu.webuni.hr.dodi.service.SmartEmployeeService;
 
 @Configuration
@@ -12,7 +12,7 @@ import hu.webuni.hr.dodi.service.SmartEmployeeService;
 public class SmartSalaryConfiguration {
 
 	@Bean
-	public EmployeeService employeeService() {
+	public AbstractEmployeeService employeeService() {
 		return new SmartEmployeeService();
 	}
 }

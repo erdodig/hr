@@ -1,42 +1,110 @@
 package hu.webuni.hr.dodi.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hu.webuni.hr.dodi.model.Company;
+import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.repository.CompanyRepository;
+import hu.webuni.hr.dodi.repository.EmployeeRepository;
 
 @Service
 public class CompanyService {
 
-	private Map<Long, Company> companies = new HashMap<>();
-	{
-		companies.put(1L, new Company(1L, 123543, "Kiss Co.", "1030 Budapest, Akárhol utca 12.", null));
-		companies.put(2L, new Company(2L, 987654, "Nagy Co.", "7630 Pécs, Nagy utca 27.", null));
-	}
+	@Autowired
+	private CompanyRepository companyRepository;
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
 
 	public Company save(Company company) {
-		companies.put(company.getId(), company);
-		return company;
+		return companyRepository.save(company);
+	}
+
+	public Company update(Company company) {
+		
+		if(!companyRepository.existsById(company.getId()))
+			return null;
+		
+		return companyRepository.save(company);
 	}
 	
 	public List<Company> findAll() {
-		return new ArrayList<>(companies.values());
+		return companyRepository.findAll();
 	}
 	
-	public Company findByid(long id) {
-		return companies.get(id);
+	public Optional<Company> findByid(Long id) {
+		return companyRepository.findById(id);
 	}
 	
-	public void delete(long id) {
-		companies.remove(id);
+	public void delete(Long id) {
+		companyRepository.deleteById(id);
 	}
-
-	public Company mapCompanyWithoutEmployees(Company c) {
-		return new Company(c.getId(), c.getRegistrationNumber(), c.getName(), c.getAddress(), null);
+	
+	public Company addEmployee(long id, Employee employee) {
+		
+		Company company = companyRepository.findById(id).get();
+		company.addEmployee(employee);
+		
+		employeeRepository.save(employee);
+		
+		return company;
+	}
+	
+	public Company deleteEmployee(long id, long employeeId) {
+		
+		Company company = companyRepository.findById(id).get();
+		
+		Employee employee = employeeRepository.findById(employeeId).get();
+		
+		employee.setCompany(null);
+		
+		company.getEmployees().remove(employee);
+		
+		employeeRepository.save(employee);
+		
+		return company;
+	}
+	
+	public Company replaceEmployees(long id, List<Employee> employees) {
+		
+		Company company = companyRepository.findById(id).get();
+		for (Employee employee : company.getEmployees()) {
+			employee.setCompany(null);
+		}
+		company.getEmployees().clear();
+		
+		for (Employee employee : employees) {
+			
+			company.addEmployee(employee);
+			Employee savedEmployee = employeeRepository.save(employee);
+			employee.setId(savedEmployee.getId());
+		}
+	
+		return company;
+	}
+	 
+	public List<Company> clearEmployees(List<Company> companies) {
+		
+		for (Company company : companies) {
+			clearEmployee(company);
+		}
+		
+		return companies;
+	}
+	
+	public Company clearEmployee(Company company) {
+		
+		for (Employee employee : company.getEmployees()) {
+			employee.setCompany(null);
+		}
+		
+		company.getEmployees().clear();	
+		
+		return company;
 	}
 
 }

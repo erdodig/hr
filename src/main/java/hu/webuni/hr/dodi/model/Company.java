@@ -2,12 +2,21 @@ package hu.webuni.hr.dodi.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-
+@Entity
 public class Company {
 	
+	@Id
+	@GeneratedValue
 	private Long id;
 	
 	private int registrationNumber;
@@ -16,6 +25,8 @@ public class Company {
 	
 	private String address;
 	
+	@OneToMany(mappedBy = "company")
+	@OrderBy("id")
 	private List<Employee> employees = new ArrayList<>();
 	
 	public Company() {
@@ -68,6 +79,30 @@ public class Company {
 
 	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
+	}
+	
+	public void addEmployee(Employee employee) {
+		employee.setCompany(this);
+		if(this.employees == null)
+			this.employees = new ArrayList<>();
+		this.employees.add(employee);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Company other = (Company) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }

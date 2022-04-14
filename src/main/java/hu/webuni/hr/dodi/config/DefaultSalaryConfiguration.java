@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import hu.webuni.hr.dodi.service.DefaultEmployeeService;
-import hu.webuni.hr.dodi.service.EmployeeService;
+import hu.webuni.hr.dodi.service.AbstractEmployeeService;
 
 @Configuration
 @Profile("!smart")
 public class DefaultSalaryConfiguration {
 
 	@Bean
-	public EmployeeService employeeService() {
+	public AbstractEmployeeService employeeService() {
 		return new DefaultEmployeeService();
 	}
 }

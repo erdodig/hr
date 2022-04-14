@@ -7,7 +7,7 @@ import hu.webuni.hr.dodi.config.HrConfigProperties;
 import hu.webuni.hr.dodi.model.Employee;
 
 @Service
-public class DefaultEmployeeService extends EmployeeService {
+public class DefaultEmployeeService extends AbstractEmployeeService {
 	
 	@Autowired
 	HrConfigProperties config;

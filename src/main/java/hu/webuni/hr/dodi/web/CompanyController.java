@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,43 +44,39 @@ public class CompanyController {
 	private EmployeeMapper employeeMapper;
 	
 	@GetMapping(params = "full=true")
-	public List<CompanyDto> getAllFull() {
-		return companyMapper.companiesToDtos(companyService.findAll());
+	public List<CompanyDto> getAll(@RequestParam(required = false) Boolean full) {
+		
+		List<Company> companies = companyService.findAll();
+		
+		if (full)		
+			return companyMapper.companiesToDtos(companyService.findAll());
+		else
+			return companyMapper.companiesToDtos(companyService.clearEmployees(companies));
 	}
 	
 
-	@JsonView(View.BaseData.class)
-	@GetMapping
-	public List<CompanyDto> getAllNonFull(){
-		return companyMapper.companiesToDtos(companyService.findAll());
-	}	
-	
 	@GetMapping("/{id}")
 	public CompanyDto getById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
 
-		Company fullCompany = companyService.findByid(id);
+		Company company = companyService.findByid(id).get();
 		
 		if(full == null || !full) {
-			return companyMapper.companyToDto(companyService.mapCompanyWithoutEmployees(fullCompany));
+			return companyMapper.companyToDto(companyService.clearEmployee(company));
 		} else
-			return companyMapper.companyToDto(fullCompany);
+			return companyMapper.companyToDto(company);
 	}
 	
 	@PostMapping
 	public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
-		
-		Company company = companyService.save(companyMapper.dtoToCompany(companyDto));
-		
-		return companyMapper.companyToDto(company);
+		return companyMapper.companyToDto(companyService.save(companyMapper.dtoToCompany(companyDto)));
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<CompanyDto> modifyCompany(@PathVariable long id, @RequestBody CompanyDto companyDto) {
 				
-		if (!companyService.findAll().stream().anyMatch(c -> c.getId() == id))
-			return ResponseEntity.notFound().build();
+		companyDto.setId(id);
 		
-		Company company = companyService.save(companyMapper.dtoToCompany(companyDto));
+		Company company = companyService.update(companyMapper.dtoToCompany(companyDto));
 		
 		return ResponseEntity.ok(companyMapper.companyToDto(company));
 	}
@@ -90,44 +87,44 @@ public class CompanyController {
 	}
 	
 	@PostMapping("/{id}/employees")
-	public CompanyDto addEmployee(@PathVariable long id, @RequestBody EmployeeDto employee) {
+	public CompanyDto addEmployee(@PathVariable long id, @RequestBody EmployeeDto employeeDto) {
 		
-		Company company = getCompanyOrThrowNotFound(id);
-		
-		company.getEmployees().add(employeeMapper.dtoToEmployee(employee));
-		
-		return companyMapper.companyToDto(company);
-	}
-
-
-	private Company getCompanyOrThrowNotFound(long id) {
-		
-		Company company = companyService.findByid(id);
-		
-		if(company == null)
+		try {
+			
+			return companyMapper
+					.companyToDto(companyService.addEmployee(id, employeeMapper.dtoToEmployee(employeeDto)));
+			
+		} catch (NoSuchElementException e) {
+			
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		
-		return company;
+		}
 	}
 	
 	@DeleteMapping("/{id}/employees/{employeeId}")
 	public CompanyDto deleteEmployee(@PathVariable long id, @PathVariable long employeeId) {
 		
-		CompanyDto companyDto = companyMapper.companyToDto(getCompanyOrThrowNotFound(id));
-		
-		companyDto.getEmployees().removeIf(e -> e.getId() == employeeId);
-		
-		return companyDto;
+		try {
+			
+			return companyMapper.companyToDto(companyService.deleteEmployee(id, employeeId));
+			
+		} catch (NoSuchElementException e) {
+			
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@PutMapping("/{id}/employees")
 	public CompanyDto replaceAllEmployees(@PathVariable long id, @RequestBody List<EmployeeDto> employees) {
 		
-		CompanyDto companyDto = companyMapper.companyToDto(getCompanyOrThrowNotFound(id));
-		
-		companyDto.setEmployees(employees);
-		
-		return companyDto;
+		try {
+			
+			return companyMapper
+					.companyToDto(companyService.replaceEmployees(id, employeeMapper.dtosToEmployees(employees)));
+			
+		} catch (NoSuchElementException e) {
+			
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	

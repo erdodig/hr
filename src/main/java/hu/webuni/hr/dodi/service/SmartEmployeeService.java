@@ -3,6 +3,7 @@ package hu.webuni.hr.dodi.service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import hu.webuni.hr.dodi.config.HrConfigProperties.Smart;
 import hu.webuni.hr.dodi.model.Employee;
 
 @Service
-public class SmartEmployeeService extends EmployeeService {
+public class SmartEmployeeService extends AbstractEmployeeService {
 
 	@Autowired
 	HrConfigProperties config;

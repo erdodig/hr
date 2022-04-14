@@ -1,41 +1,45 @@
 package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Employee {
 
+	@Id
+	@GeneratedValue
 	private Long id;
 	
-	@NotEmpty
 	private String name;
 	
-	@NotEmpty
-	private String title;
+	private String jobTitle;
 	
-	@Min(value = 0)
 	private int salary;
 	
-	@Past
-	private LocalDateTime entryDate;
+	private LocalDateTime dateOfStartWork;
+	
+	@ManyToOne
+	private Company company;
 	
 	public Employee() {
 	}
 
-	public Employee(Long id, String name, String title, int salary, LocalDateTime entryDate) {
+	public Employee(Long id, String name, String jobTitle, int salary, LocalDateTime dateOfStartWork) {
 		this.id = id;
 		this.name = name;
-		this.title = title;
+		this.jobTitle = jobTitle;
 		this.salary = salary;
-		this.entryDate = entryDate;
+		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	public Employee(int salary, LocalDateTime entryDate) {
+	public Employee(int salary, LocalDateTime dateOfStartWork) {
 		this.salary = salary;
-		this.entryDate = entryDate;
+		this.dateOfStartWork = dateOfStartWork;
 	}
 
 	public Long getId() {
@@ -54,12 +58,12 @@ public class Employee {
 		this.name = name;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getJobTitle() {
+		return jobTitle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
 	}
 
 	public int getSalary() {
@@ -70,12 +74,37 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public LocalDateTime getEntryDate() {
-		return entryDate;
+	public LocalDateTime getDateOfStartWork() {
+		return dateOfStartWork;
 	}
 
-	public void setEntryDate(LocalDateTime entryDate) {
-		this.entryDate = entryDate;
+	public void setDateOfStartWork(LocalDateTime dateOfStartWork) {
+		this.dateOfStartWork = dateOfStartWork;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }
