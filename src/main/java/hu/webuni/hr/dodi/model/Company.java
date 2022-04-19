@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-
-import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 public class Company {
@@ -25,7 +26,12 @@ public class Company {
 	
 	private String address;
 	
-	@OneToMany(mappedBy = "company")
+//	@Enumerated(EnumType.STRING)
+//	@Column(length = 10)
+	@ManyToOne()
+	private CompanyType companyType;
+	
+	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@OrderBy("id")
 	private List<Employee> employees = new ArrayList<>();
 	
@@ -33,12 +39,10 @@ public class Company {
 		
 	}
 
-	public Company(Long id, int registrationNumber, String name, String adress, List<Employee> employees) {
-		this.id = id;
+	public Company(int registrationNumber, String name, String adress) {
 		this.registrationNumber = registrationNumber;
 		this.name = name;
 		this.address = adress;
-		this.employees = employees;
 	}
 
 	public int getRegistrationNumber() {
@@ -73,6 +77,14 @@ public class Company {
 		this.address = address;
 	}
 
+	public CompanyType getCompanyType() {
+		return companyType;
+	}
+
+	public void setCompanyType(CompanyType companyType) {
+		this.companyType = companyType;
+	}
+
 	public List<Employee> getEmployees() {
 		return employees;
 	}
@@ -86,6 +98,12 @@ public class Company {
 		if(this.employees == null)
 			this.employees = new ArrayList<>();
 		this.employees.add(employee);
+	}
+
+	@Override
+	public String toString() {
+		return "Company [id=" + id + ", registrationNumber=" + registrationNumber + ", name=" + name + ", address="
+				+ address + ", companyType=" + companyType.getCompanyType() + ", employees=" + employees + "]";
 	}
 
 	@Override
