@@ -1,4 +1,4 @@
-package hu.webuni.hr.dodi.service;
+package hu.webuni.hr.dodi.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +15,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import hu.webuni.hr.dodi.dto.EmployeeDto;
-import hu.webuni.hr.dodi.web.EmployeeController;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerIT {
@@ -24,6 +23,7 @@ public class EmployeeControllerIT {
 
 	@Autowired
 	WebTestClient webTestClient;
+
 	
 	@Test
 	void testThatNewValidEmployeeCanBeSaved() throws Exception {
@@ -139,5 +139,5 @@ public class EmployeeControllerIT {
 		Collections.sort(responseList, Comparator.comparing(EmployeeDto::getId));
 		return responseList;
 	}
-	
+
 }
