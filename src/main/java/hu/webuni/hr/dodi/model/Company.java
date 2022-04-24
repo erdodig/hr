@@ -4,27 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+@NamedEntityGraph(
+		name = "Company.full",
+		attributeNodes = @NamedAttributeNode("employees")
+)
 @Entity
 public class Company {
 	
 	@Id
 	@GeneratedValue
 	private Long id;
+	
 	private int registrationNumber;
+	
 	private String name;
+	
 	private String address;
 	
 	@OneToMany(mappedBy = "company")
 	@OrderBy("employeeId")
 	private List<Employee> employees;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private CompanyType companyType;
 	
 	public Company() {

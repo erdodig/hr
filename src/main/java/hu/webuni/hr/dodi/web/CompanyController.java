@@ -46,11 +46,24 @@ public class CompanyController {
 
 	// 1. megoldás
 	@GetMapping
-	public List<CompanyDto> getAll(@RequestParam(required = false) Boolean full) {
-		List<Company> companies = companyService.findAll();
-		return mapCompanies(companies, full);
-	}
+//	public List<CompanyDto> getAll(@RequestParam(required = false) Boolean full) {
+//		List<Company> companies = companyService.findAll();
+//		return mapCompanies(companies, full);
+//	}
 
+	public List<CompanyDto> getAll(@RequestParam(required = false) Boolean full) {
+		
+		List<Company> companies = null;
+		
+		boolean notfull = (full == null || !full);
+		if (notfull) 			
+			companies = companyService.findAll();
+		else
+			companies = companyRepository.findAllWithEmployees();
+		
+		return mapCompanies(companies, notfull);
+	}
+	
 	private List<CompanyDto> mapCompanies(List<Company> companies, Boolean full) {
 		if(isFull(full)) {
 			return companyMapper.companiesToDtos(companies);

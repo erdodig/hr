@@ -3,6 +3,7 @@ package hu.webuni.hr.dodi.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,20 +16,21 @@ public class Employee {
 	private Long employeeId;
 	
 	private String name;
-//	private String jobTitle;
+	
 	private int salary;
+	
 	private LocalDateTime dateOfStartWork;
 	
 	@ManyToOne
 	private Company company;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Position position;
 	
 	public Employee() {
 	}
 
-	public Employee(Long employeeId, String name, /*String jobTitle,*/ int salary, LocalDateTime dateOfStartWork) {
+	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork) {
 		this.employeeId = employeeId;
 		this.name = name;
 		this.salary = salary;

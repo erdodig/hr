@@ -21,6 +21,7 @@ public interface EmployeeMapper {
 	EmployeeDto employeeToDto(Employee employee);
 
 	@InheritInverseConfiguration
+	@Mapping(target = "company.companyType", ignore = true)
 	Employee dtoToEmployee(EmployeeDto employeeDto);
 
 	List<Employee> dtosToEmployees(List<EmployeeDto> employees);
