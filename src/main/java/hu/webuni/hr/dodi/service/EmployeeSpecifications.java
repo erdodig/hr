@@ -32,7 +32,7 @@ public class EmployeeSpecifications {
 	}
 
 	public static Specification<Employee> hasSalary(int salary) {
-		return (root, cq, cb) -> cb.equal(root.get(Employee_.salary), salary);
+		return (root, cq, cb) -> cb.between(root.get(Employee_.salary), (int) (salary * 1.1), (int) (salary * 0.9));
 	}	
 	
 }
