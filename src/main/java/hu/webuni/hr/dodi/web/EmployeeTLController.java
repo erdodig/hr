@@ -1,6 +1,5 @@
 package hu.webuni.hr.dodi.web;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +16,6 @@ public class EmployeeTLController {
 
 	private List<Employee> allEmployees = new ArrayList<>();
 	
-	{
-		allEmployees.add(new Employee("Kis Gábor", null, 100000, LocalDateTime.of(2012, 1, 1, 8, 0, 0), null));
-	}
 
 	@GetMapping("/employees")
 	public String listEmployees(Map<String, Object> model) {
@@ -31,7 +27,7 @@ public class EmployeeTLController {
 	@GetMapping("/employees/{id}")
 	public String editEmployee(@PathVariable long id, Map<String, Object> model) {
 		Employee selectedEmployee = allEmployees.stream()
-				.filter(e -> e.getId().equals(id)).findFirst().get();
+				.filter(e -> e.getEmployeeId().equals(id)).findFirst().get();
 		model.put("employee", selectedEmployee);
 		return "editEmployee";
 	}
@@ -44,14 +40,14 @@ public class EmployeeTLController {
 	
 	@GetMapping("/deleteEmployee/{id}")
 	public String deleteEmployee(@PathVariable long id) {
-		allEmployees.removeIf(e -> e.getId().equals(id));
+		allEmployees.removeIf(e -> e.getEmployeeId().equals(id));
 		return "redirect:/employees";
 	}
 	
 	@PostMapping("/updateEmployee")
 	public String updateEmployee(Employee employee) {
 		for(int i=0; i< allEmployees.size(); i++) {
-			if(allEmployees.get(i).getId().equals(employee.getId())) {
+			if(allEmployees.get(i).getEmployeeId().equals(employee.getEmployeeId())) {
 				allEmployees.set(i, employee);
 				break;
 			}

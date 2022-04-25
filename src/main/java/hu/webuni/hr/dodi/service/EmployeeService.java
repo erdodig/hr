@@ -12,10 +12,12 @@ public interface EmployeeService {
 	public Employee update(Employee employee);
 	
 	public List<Employee> findAll();
-
-	public Optional<Employee> findByid(Long id);
+	
+	public Optional<Employee> findById(long id);
 	
 	public void delete(long id);
 
 	int getPayRaisePercent(Employee employee);
+	
+	public List<Employee> findEmployeesByExample(Employee employee);
 }

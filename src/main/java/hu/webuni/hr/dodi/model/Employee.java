@@ -1,9 +1,7 @@
 package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,29 +13,28 @@ public class Employee {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Long employeeId;
 	
 	private String name;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Position jobTitle;
 	
 	private int salary;
 	
 	private LocalDateTime dateOfStartWork;
 	
-	@ManyToOne()
+	@ManyToOne
 	private Company company;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Position position;
 	
 	public Employee() {
 	}
 
-	public Employee(String name, Position jobTitle, int salary, LocalDateTime dateOfStartWork, Company company) {
+	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork) {
+		this.employeeId = employeeId;
 		this.name = name;
-		this.jobTitle = jobTitle;
 		this.salary = salary;
 		this.dateOfStartWork = dateOfStartWork;
-		this.company = company;
 	}
 
 	public Employee(int salary, LocalDateTime dateOfStartWork) {
@@ -45,12 +42,12 @@ public class Employee {
 		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getEmployeeId() {
+		return employeeId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
 	}
 
 	public String getName() {
@@ -59,14 +56,6 @@ public class Employee {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Position getJobTitle() {
-		return jobTitle;
-	}
-
-	public void setJobTitle(Position jobTitle) {
-		this.jobTitle = jobTitle;
 	}
 
 	public int getSalary() {
@@ -95,7 +84,10 @@ public class Employee {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((employeeId == null) ? 0 : employeeId.hashCode());
+		return result;
 	}
 
 	@Override
@@ -107,7 +99,23 @@ public class Employee {
 		if (getClass() != obj.getClass())
 			return false;
 		Employee other = (Employee) obj;
-		return Objects.equals(id, other.id);
+		if (employeeId == null) {
+			if (other.employeeId != null)
+				return false;
+		} else if (!employeeId.equals(other.employeeId))
+			return false;
+		return true;
 	}
 
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	
+	
+
+	
 }

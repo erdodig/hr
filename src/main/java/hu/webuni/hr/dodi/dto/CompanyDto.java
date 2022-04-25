@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import hu.webuni.hr.dodi.model.CompanyType;
+
 
 public class CompanyDto {
 	

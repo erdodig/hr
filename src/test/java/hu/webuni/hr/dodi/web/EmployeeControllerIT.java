@@ -1,4 +1,4 @@
-package hu.webuni.hr.dodi.service;
+package hu.webuni.hr.dodi.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,11 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import hu.webuni.hr.dodi.dto.EmployeeDto;
-import hu.webuni.hr.dodi.web.EmployeeController;
+import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.repository.CompanyRepository;
+import hu.webuni.hr.dodi.repository.EmployeeRepository;
+import hu.webuni.hr.dodi.repository.PositionRepository;
+import hu.webuni.hr.dodi.service.EmployeeService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerIT {
@@ -24,6 +30,23 @@ public class EmployeeControllerIT {
 
 	@Autowired
 	WebTestClient webTestClient;
+
+	@Autowired
+	EmployeeService employeeService;
+	
+	@Autowired
+	EmployeeRepository employeeRepository;
+	
+	@Autowired
+	CompanyRepository companyRepository;
+	
+	@Autowired
+	PositionRepository positionRepository;
+	
+	@BeforeEach
+	public void init() {
+		employeeRepository.deleteAll();
+	}
 	
 	@Test
 	void testThatNewValidEmployeeCanBeSaved() throws Exception {
@@ -109,6 +132,18 @@ public class EmployeeControllerIT {
 			.isEqualTo(savedEmployee);
 	}
 	
+	@Test
+	void testFindEmployeesByExample() throws Exception {
+
+		Employee employee = new Employee(0L, "Kiss Márton", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+		employee.setCompany(companyRepository.findAll().get(0));
+		employee.setPosition(positionRepository.findAll().get(0));
+		
+		List<Employee> employees = employeeService.findEmployeesByExample(employee);
+		
+		assertThat(employees.stream().map(Employee::getEmployeeId).collect(Collectors.toList())).containsExactly(employee.getEmployeeId());
+	}
+	
 	private ResponseSpec modifyEmployee(EmployeeDto newEmployee) {
 		String path = BASE_URI + "/" + newEmployee.getId();
 		return webTestClient
@@ -139,5 +174,5 @@ public class EmployeeControllerIT {
 		Collections.sort(responseList, Comparator.comparing(EmployeeDto::getId));
 		return responseList;
 	}
-	
+
 }

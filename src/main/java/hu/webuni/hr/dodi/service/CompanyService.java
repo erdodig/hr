@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import hu.webuni.hr.dodi.model.Company;
 import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.model.Position;
 import hu.webuni.hr.dodi.repository.CompanyRepository;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
+import hu.webuni.hr.dodi.repository.PositionRepository;
 
 @Service
 public class CompanyService {
@@ -19,58 +21,58 @@ public class CompanyService {
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
-
+	
+	@Autowired
+	private PositionRepository positionRepository;
+	
 	public Company save(Company company) {
 		return companyRepository.save(company);
 	}
 
 	public Company update(Company company) {
-		
 		if(!companyRepository.existsById(company.getId()))
 			return null;
-		
 		return companyRepository.save(company);
 	}
-	
+
 	public List<Company> findAll() {
 		return companyRepository.findAll();
 	}
-	
-	public Optional<Company> findByid(Long id) {
+
+	public Optional<Company> findById(long id) {
 		return companyRepository.findById(id);
 	}
-	
-	public void delete(Long id) {
+
+	public void delete(long id) {
 		companyRepository.deleteById(id);
 	}
 	
 	public Company addEmployee(long id, Employee employee) {
-		
 		Company company = companyRepository.findById(id).get();
 		company.addEmployee(employee);
-		
+		Position transientPosition = employee.getPosition();
+		if(transientPosition != null) {
+			List<Position> positionsByName = positionRepository.findByName(transientPosition.getName());
+			if(positionsByName.isEmpty())
+				throw new RuntimeException("position with this name does not exist in DB");
+			
+			Position positionInDb = positionsByName.get(0);
+			employee.setPosition(positionInDb);
+		}
 		employeeRepository.save(employee);
-		
 		return company;
 	}
 	
 	public Company deleteEmployee(long id, long employeeId) {
-		
 		Company company = companyRepository.findById(id).get();
-		
 		Employee employee = employeeRepository.findById(employeeId).get();
-		
 		employee.setCompany(null);
-		
 		company.getEmployees().remove(employee);
-		
 		employeeRepository.save(employee);
-		
 		return company;
 	}
 	
 	public Company replaceEmployees(long id, List<Employee> employees) {
-		
 		Company company = companyRepository.findById(id).get();
 		for (Employee employee : company.getEmployees()) {
 			employee.setCompany(null);
@@ -78,33 +80,12 @@ public class CompanyService {
 		company.getEmployees().clear();
 		
 		for (Employee employee : employees) {
-			
 			company.addEmployee(employee);
 			Employee savedEmployee = employeeRepository.save(employee);
-			employee.setId(savedEmployee.getId());
+			employee.setEmployeeId(savedEmployee.getEmployeeId());
 		}
 	
 		return company;
 	}
-	 
-	public List<Company> clearEmployees(List<Company> companies) {
-		
-		for (Company company : companies) {
-			clearEmployee(company);
-		}
-		
-		return companies;
-	}
 	
-	public Company clearEmployee(Company company) {
-		
-		for (Employee employee : company.getEmployees()) {
-			employee.setCompany(null);
-		}
-		
-		company.getEmployees().clear();	
-		
-		return company;
-	}
-
 }

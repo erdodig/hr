@@ -2,17 +2,21 @@ package hu.webuni.hr.dodi.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+@NamedEntityGraph(
+		name = "Company.full",
+		attributeNodes = @NamedAttributeNode("employees")
+)
 @Entity
 public class Company {
 	
@@ -26,23 +30,22 @@ public class Company {
 	
 	private String address;
 	
-//	@Enumerated(EnumType.STRING)
-//	@Column(length = 10)
-	@ManyToOne()
+	@OneToMany(mappedBy = "company")
+	@OrderBy("employeeId")
+	private List<Employee> employees;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	private CompanyType companyType;
 	
-	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@OrderBy("id")
-	private List<Employee> employees = new ArrayList<>();
-	
 	public Company() {
-		
 	}
 
-	public Company(int registrationNumber, String name, String adress) {
+	public Company(Long id, int registrationNumber, String name, String adress, List<Employee> employees) {
+		this.id = id;
 		this.registrationNumber = registrationNumber;
 		this.name = name;
 		this.address = adress;
+		this.employees = employees;
 	}
 
 	public int getRegistrationNumber() {
@@ -77,14 +80,6 @@ public class Company {
 		this.address = address;
 	}
 
-	public CompanyType getCompanyType() {
-		return companyType;
-	}
-
-	public void setCompanyType(CompanyType companyType) {
-		this.companyType = companyType;
-	}
-
 	public List<Employee> getEmployees() {
 		return employees;
 	}
@@ -101,14 +96,11 @@ public class Company {
 	}
 
 	@Override
-	public String toString() {
-		return "Company [id=" + id + ", registrationNumber=" + registrationNumber + ", name=" + name + ", address="
-				+ address + ", companyType=" + companyType.getCompanyType() + ", employees=" + employees + "]";
-	}
-
-	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -120,7 +112,20 @@ public class Company {
 		if (getClass() != obj.getClass())
 			return false;
 		Company other = (Company) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
+
+        public CompanyType getCompanyType() {
+		return companyType;
+	}
+
+	public void setCompanyType(CompanyType companyType) {
+		this.companyType = companyType;
+	}	
 
 }

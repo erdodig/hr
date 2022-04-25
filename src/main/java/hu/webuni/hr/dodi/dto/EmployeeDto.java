@@ -1,11 +1,12 @@
 package hu.webuni.hr.dodi.dto;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Positive;
+
+import hu.webuni.hr.dodi.model.Position;
 
 public class EmployeeDto {
 	
@@ -17,11 +18,13 @@ public class EmployeeDto {
 	@NotEmpty
 	private String title;
 	
-	@Min(value = 0)
+	@Positive
 	private int salary;
 	
 	@Past
 	private LocalDateTime entryDate;
+	
+	private CompanyDto company;
 
 	public EmployeeDto() {
 
@@ -80,22 +83,13 @@ public class EmployeeDto {
 		return "Employee [id=" + id + ", name=" + name + ", title=" + title + ", salary=" + salary + ", entryDate="
 				+ entryDate + "]";
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	
+	public CompanyDto getCompany() {
+		return company;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EmployeeDto other = (EmployeeDto) obj;
-		return id == other.id;
+	public void setCompany(CompanyDto company) {
+		this.company = company;
 	}
 
 }

@@ -1,84 +1,67 @@
 package hu.webuni.hr.dodi.model;
 
-import java.util.Objects;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Position {
-	
+
 	@Id
 	@GeneratedValue
-	private Long id;
+	private int id;
+	private String name;
+	private Qualification qualification;
+//	private int minSalary;
 	
-	private String jobTitle;
+	@OneToMany(mappedBy = "position")
+	private List<Employee> employees;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Education education;
-	
-	private int minSalary;
 	
 	public Position() {
-		
 	}
-
-	public Position(String jobTitle, Education education, int minSalary) {
-		this.jobTitle = jobTitle;
-		this.education = education;
-		this.minSalary = minSalary;
+	
+	public Position(String name, Qualification qualification) {
+		super();
+		this.name = name;
+		this.qualification = qualification;
 	}
-
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getJobTitle() {
-		return jobTitle;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Qualification getQualification() {
+		return qualification;
+	}
+	public void setQualification(Qualification qualification) {
+		this.qualification = qualification;
 	}
 
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
+	public List<Employee> getEmployees() {
+		return employees;
 	}
 
-	public Education getEducation() {
-		return education;
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
 	}
 
-	public void setEducation(Education education) {
-		this.education = education;
-	}
-
-	public int getMinSalary() {
-		return minSalary;
-	}
-
-	public void setMinSalary(int minSalary) {
-		this.minSalary = minSalary;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Position other = (Position) obj;
-		return Objects.equals(id, other.id);
-	}
-
+//	public int getMinSalary() {
+//		return minSalary;
+//	}
+//
+//	public void setMinSalary(int minSalary) {
+//		this.minSalary = minSalary;
+//	}
+	
 }

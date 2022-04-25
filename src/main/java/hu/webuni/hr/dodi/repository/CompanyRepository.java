@@ -2,24 +2,33 @@ package hu.webuni.hr.dodi.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import hu.webuni.hr.dodi.model.AverageSalaryByPosition;
 import hu.webuni.hr.dodi.model.Company;
 
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+public interface CompanyRepository extends JpaRepository<Company, Long>{
 
-	@Query("SELECT DISTINCT c "
-			+ "FROM Company c "
-			+ "JOIN FETCH Employee e ON e.company.id = c.id "
-			+ "WHERE e.salary > ?1")
-	List<Company> findCompaniesWhereThereHigherSalaryEmployees(int salary);
+	@Query("SELECT DISTINCT c FROM Company c JOIN c.employees e WHERE e.salary > :minSalary")
+	public List<Company> findByEmployeeWithSalaryHigherThan(int minSalary);
 	
-	@Query("SELECT c "
+	
+	@Query("SELECT c FROM Company c WHERE SIZE(c.employees) > :minEmployeeCount")
+	public List<Company> findByEmployeeCountHigherThan(int minEmployeeCount);
+
+	@Query("SELECT e.position.name AS position, avg(e.salary) AS averageSalary "
 			+ "FROM Company c "
-			+ "JOIN FETCH Employee e ON e.company.id = c.id "
-			+ "GROUP BY 1 "
-			+ "HAVING COUNT(1) > ?1 "
-			+ "ORDER BY c.id")
-	List<Company> findCompaniesWhereEmployeesCountMoreThan(long count);
+			+ "INNER JOIN c.employees e "
+			+ "WHERE c.id=:companyId "
+			+ "GROUP BY e.position.name "
+			+ "ORDER BY avg(e.salary) DESC")
+	public List<AverageSalaryByPosition> findAverageSalariesByPosition(long companyId);
+	
+//	@Query("SELECT DISTINCT c FROM Company c LEFT JOIN FETCH c.employees")
+//	@EntityGraph(attributePaths = "employees")
+	@EntityGraph("Company.full")
+	@Query("SELECT DISTINCT c FROM Company c")
+	public List<Company> findAllWithEmployees();
 }

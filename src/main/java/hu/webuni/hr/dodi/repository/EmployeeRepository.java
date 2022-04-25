@@ -5,25 +5,40 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import hu.webuni.hr.dodi.model.Employee;
 
-//public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-public interface EmployeeRepository extends PagingAndSortingRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
 
-	List<Employee> findByJobTitle(String jobTitle);
-	
+	Page<Employee> findBySalaryGreaterThan(Integer minSalary, Pageable pageable);
+
+	List<Employee> findByPositionName(String jobTitle);
 	List<Employee> findByNameStartingWithIgnoreCase(String name);
-	
 	List<Employee> findByDateOfStartWorkBetween(LocalDateTime start, LocalDateTime end);
-	
-	Page<Employee> findAll(Pageable pageable);
 
-//	@Query("SELECT e, e.jobTitle, AVG(e.salary) "
-//			+ "FROM Employee e "
-//			+ "WHERE e.company.id = ?1 "
-//			+ "GROUP BY e, e.jobTitle")
-//	List<Employee> findByJobtitleWithAverageSalary(Long companyId);
+	
+	@Modifying
+	//@Transactional
+	//1. megoldás: nem működik JOIN + UPDATE miatt
+//	@Query("UPDATE Employee e "
+//			+ "SET e.salary = :minSalary "
+//			+ "WHERE e.position.name = :positionName "
+//			+ "AND e.company.id = :companyId "
+//			+ "AND e.salary < :minSalary")
+	@Query("UPDATE Employee e "
+			+ "SET e.salary = :minSalary "
+			+ "WHERE e.id IN("
+			+ "SELECT (e2.id) "
+			+ "FROM Employee e2 "
+			+ "WHERE e2.position.name = :positionName "
+			+ "AND e2.company.id = :companyId "
+			+ "AND e2.salary < :minSalary"
+			+ ")")
+	void updateSalaries(String positionName, int minSalary, long companyId);
+	
 	
 }

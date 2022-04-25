@@ -1,11 +1,12 @@
 package hu.webuni.hr.dodi.web;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,45 +37,61 @@ public class EmployeeController {
 	private EmployeeMapper employeeMapper;
 	
 	@Autowired
-	EmployeeRepository employeeRepository;
+	private EmployeeRepository employeeRepository;
+
 	
 	@GetMapping
-	public List<EmployeeDto> getAll() {
-		return employeeMapper.employeesToDtos(employeeService.findAll());
+	public List<EmployeeDto> getEmployees(@RequestParam(required = false) Integer minSalary, Pageable pageable) {
+		List<Employee> employees = null;
+		if(minSalary == null) {
+			employees = employeeService.findAll();
+		} else {
+			Page<Employee> page = employeeRepository.findBySalaryGreaterThan(minSalary, pageable);
+			employees = page.getContent();
+			System.out.println(page.getTotalElements());
+			System.out.println(page.getTotalPages());
+			System.out.println(page.getSize());
+			System.out.println(page.isFirst());
+			System.out.println(page.isLast());
+			System.out.println(page.hasNext());
+			System.out.println(page.hasPrevious());
+		}
+		return employeeMapper.employeesToDtos(employees);
 	}
+	
+	//1. megoldás
+//	@GetMapping(params = "minSalary")
+//	public List<EmployeeDto> getAllByMinSalary(@RequestParam int minSalary){
+//		return employees.values().stream().filter(e -> e.getSalary() > minSalary).collect(Collectors.toList());
+//	}
 	
 	@GetMapping("/{id}")
 	public EmployeeDto getById(@PathVariable long id) {
-		
-		Employee employee = employeeService.findByid(id).get();
-		
-		if (employee != null)
-			return employeeMapper.employeeToDto(employee);
-		else
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		Employee employee = findByIdOrThrow(id);
+		return employeeMapper.employeeToDto(employee);
 	}
+	
+	private Employee findByIdOrThrow(long id) {
+		return employeeService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	}
+
 	
 	@PostMapping
 	public EmployeeDto createEmployee(@RequestBody @Valid EmployeeDto employeeDto) {
-		
-		Employee employee = employeeService.save(employeeMapper.dtoToEmployee(employeeDto));
-		
-		return employeeMapper.employeeToDto(employee);
+		return employeeMapper.employeeToDto(employeeService.save(employeeMapper.dtoToEmployee(employeeDto)));
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<EmployeeDto> modifyEmployee(@PathVariable long id, @RequestBody @Valid EmployeeDto employeeDto) {
-		
-		Employee employee = employeeService.update(employeeMapper.dtoToEmployee(employeeDto));
-		
-		if(employee == null) {
-			
+		employeeDto.setId(id);
+		Employee updatedEmployee = employeeService.update(employeeMapper.dtoToEmployee(employeeDto));
+		if(updatedEmployee == null) {
 			return ResponseEntity.notFound().build();
-			
 		} else {
-			
-			return ResponseEntity.ok(employeeMapper.employeeToDto(employee));
+			return ResponseEntity.ok(employeeMapper.employeeToDto(updatedEmployee));
 		}
+		
+
 	}
 	
 	@DeleteMapping("/{id}")
@@ -82,54 +100,7 @@ public class EmployeeController {
 	}
 	
 	@PostMapping("/payRaise")
-	public int getPayRaisePercent(@RequestBody @Valid Employee employee) {
+	public int getPayRaisePercent(@RequestBody Employee employee) {
 		return employeeService.getPayRaisePercent(employee);
 	}
-	
-	@PutMapping("/{jobtitle}")
-	public ResponseEntity<List<EmployeeDto>> getByJobTitle(@PathVariable String jobTitle) {
-		
-		List<Employee> employees = employeeRepository.findByJobTitle(jobTitle);
-		
-		if(employees == null) {
-			
-			return ResponseEntity.notFound().build();
-			
-		} else {
-			
-			return ResponseEntity.ok(employeeMapper.employeesToDtos(employees));
-		}
-	}
-	
-	@PutMapping("/{nameStart}")
-	public ResponseEntity<List<EmployeeDto>> getByNameStartingWithIgnoreCase(@PathVariable String name) {
-		
-		List<Employee> employees = employeeRepository.findByNameStartingWithIgnoreCase(name);
-		
-		if(employees == null) {
-			
-			return ResponseEntity.notFound().build();
-			
-		} else {
-			
-			return ResponseEntity.ok(employeeMapper.employeesToDtos(employees));
-		}
-	}
-	
-	@PutMapping("/{workBetween}")
-	public ResponseEntity<List<EmployeeDto>> getByDateOfStartWorkBetween(@PathVariable LocalDateTime start, 
-				@PathVariable LocalDateTime end) {
-		
-		List<Employee> employees = employeeRepository.findByDateOfStartWorkBetween(start, end);
-		
-		if(employees == null) {
-			
-			return ResponseEntity.notFound().build();
-			
-		} else {
-			
-			return ResponseEntity.ok(employeeMapper.employeesToDtos(employees));
-		}
-	}
-	
 }

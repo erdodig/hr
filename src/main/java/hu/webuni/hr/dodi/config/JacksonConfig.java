@@ -1,4 +1,4 @@
-//package hu.webuni.hr.minta.config;
+//package hu.webuni.hr.dodi.config;
 //
 //import java.time.format.DateTimeFormatter;
 //
