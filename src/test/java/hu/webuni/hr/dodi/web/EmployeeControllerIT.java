@@ -139,11 +139,25 @@ public class EmployeeControllerIT {
 		employee.setCompany(companyRepository.findAll().get(0));
 		employee.setPosition(positionRepository.findAll().get(0));
 		
-		List<Employee> employees = employeeService.findEmployeesByExample(employee);
+		List<EmployeeDto> employees = findEmployeesByExample(employee);
 		
-		assertThat(employees.stream().map(Employee::getEmployeeId).collect(Collectors.toList())).containsExactly(employee.getEmployeeId());
+		assertThat(employees.stream().map(EmployeeDto::getId).collect(Collectors.toList())).containsExactly(employee.getEmployeeId());
+	
 	}
 	
+	private List<EmployeeDto> findEmployeesByExample(Employee employee) {
+		List<EmployeeDto> responseList = webTestClient
+				.get()
+				.uri(BASE_URI + "/findEmployees")
+				.exchange()
+				.expectStatus()
+				.isOk()
+				.expectBodyList(EmployeeDto.class)
+				.returnResult()
+				.getResponseBody();
+		return responseList;
+	}
+
 	private ResponseSpec modifyEmployee(EmployeeDto newEmployee) {
 		String path = BASE_URI + "/" + newEmployee.getId();
 		return webTestClient
