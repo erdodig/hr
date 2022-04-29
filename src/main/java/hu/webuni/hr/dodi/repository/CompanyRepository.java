@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import hu.webuni.hr.dodi.model.AverageSalaryByPosition;
 import hu.webuni.hr.dodi.model.Company;
 
-public interface CompanyRepository extends JpaRepository<Company, Long>{
+public interface CompanyRepository extends JpaRepository<Company, Long> {
 
 	@Query("SELECT DISTINCT c FROM Company c JOIN c.employees e WHERE e.salary > :minSalary")
 	public List<Company> findByEmployeeWithSalaryHigherThan(int minSalary);

@@ -37,7 +37,6 @@ public class CompanyController {
 
 	public CompanyController(CompanyMapper companyMapper, CompanyService companyService, EmployeeMapper employeeMapper,
 			CompanyRepository companyRepository) {
-		super();
 		this.companyMapper = companyMapper;
 		this.companyService = companyService;
 		this.employeeMapper = employeeMapper;
