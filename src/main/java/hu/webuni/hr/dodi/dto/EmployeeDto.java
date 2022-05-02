@@ -6,8 +6,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Positive;
 
-import hu.webuni.hr.dodi.model.Position;
-
 public class EmployeeDto {
 	
 	private long id;

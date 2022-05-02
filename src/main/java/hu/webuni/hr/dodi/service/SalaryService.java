@@ -12,9 +12,9 @@ import hu.webuni.hr.dodi.repository.PositionRepository;
 public class SalaryService {
 
 	private EmployeeService employeeService;
-	private PositionRepository positionRepository;
 	private PositionDetailsByCompanyRepository positionDetailsByCompanyRepository;
 	private EmployeeRepository employeeRepository;
+	private PositionRepository positionRepository;
 	
 	public SalaryService(EmployeeService employeeService, PositionRepository positionRepository,
 			PositionDetailsByCompanyRepository positionDetailsByCompanyRepository,

@@ -19,16 +19,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 	List<Employee> findByPositionName(String jobTitle);
 	List<Employee> findByNameStartingWithIgnoreCase(String name);
 	List<Employee> findByDateOfStartWorkBetween(LocalDateTime start, LocalDateTime end);
-
 	
 	@Modifying
-	//@Transactional
-	//1. megoldás: nem működik JOIN + UPDATE miatt
-//	@Query("UPDATE Employee e "
-//			+ "SET e.salary = :minSalary "
-//			+ "WHERE e.position.name = :positionName "
-//			+ "AND e.company.id = :companyId "
-//			+ "AND e.salary < :minSalary")
 	@Query("UPDATE Employee e "
 			+ "SET e.salary = :minSalary "
 			+ "WHERE e.id IN("
@@ -40,5 +32,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 			+ ")")
 	void updateSalaries(String positionName, int minSalary, long companyId);
 	
+//	@EntityGraph(attributePaths = "employees")
+//	List<Employee> findByPosition(Position position);
 	
 }

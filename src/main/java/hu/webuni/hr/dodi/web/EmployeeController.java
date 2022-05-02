@@ -89,8 +89,7 @@ public class EmployeeController {
 			return ResponseEntity.notFound().build();
 		} else {
 			return ResponseEntity.ok(employeeMapper.employeeToDto(updatedEmployee));
-		}
-		
+		}		
 
 	}
 	
