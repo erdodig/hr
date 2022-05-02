@@ -1,5 +1,7 @@
 package hu.webuni.hr.dodi.mapper;
 
+import java.util.List;
+
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,7 +22,9 @@ public interface HolidayRequestMapper {
 	@Mapping(target = "leader.company.companyType", ignore = true)
 	HolidayRequest dtoToHolidayRequest(HolidayRequestDto holidayRequestDto);
 
-	@InheritInverseConfiguration
-	HolidayRequestDto holidayRequestToDto(HolidayRequest save);
+	@InheritInverseConfiguration 
+	HolidayRequestDto holidayRequestToDto(HolidayRequest holidayRequest);
+	
+	List<HolidayRequestDto> holidayRequestToDtos(List<HolidayRequest> holidayRequests);
 	
 }

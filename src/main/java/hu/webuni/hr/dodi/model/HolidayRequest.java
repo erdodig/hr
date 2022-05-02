@@ -13,17 +13,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
 
-//@NamedEntityGraph(
-//		name = "employee.position.employees",
-//		attributeNodes = {
-//				@NamedAttributeNode(value = "requestingEmployee", subgraph = "requesting.position"),
-//				@NamedAttributeNode(value = "leader", subgraph = "leader.position"),
-//		},
-//		subgraphs = {
-//				@NamedSubgraph( attributeNodes = { @NamedAttributeNode(value = "position") }, name = "requesting.position"),
-//				@NamedSubgraph(attributeNodes = { @NamedAttributeNode(value = "position") }, name = "leader.position")
-//		}
-//)
 @Entity
 public class HolidayRequest {
 
@@ -110,6 +99,13 @@ public class HolidayRequest {
 
 	public void setLeader(Employee leader) {
 		this.leader = leader;
+	}
+
+	@Override
+	public String toString() {
+		return "HolidayRequest [id=" + id + ", fromDate=" + fromDate + ", toDate=" + toDate + ", requestTime="
+				+ requestTime + ", requestingEmployee=" + requestingEmployee + ", holidayRequestState="
+				+ holidayRequestState + ", leader=" + leader + "]";
 	}
 
 	@Override
