@@ -3,6 +3,7 @@ package hu.webuni.hr.dodi.web;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,25 +18,32 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import hu.webuni.hr.dodi.dto.EmployeeDto;
+import hu.webuni.hr.dodi.mapper.EmployeeMapper;
+import hu.webuni.hr.dodi.model.Company;
 import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.model.Position;
+import hu.webuni.hr.dodi.model.Qualification;
 import hu.webuni.hr.dodi.repository.CompanyRepository;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
 import hu.webuni.hr.dodi.repository.PositionRepository;
-import hu.webuni.hr.dodi.service.EmployeeService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerIT {
 
 	private static final String BASE_URI = "/api/employees";
+	
+	private static Position position;
+	
+	private Company company2;
 
 	@Autowired
 	WebTestClient webTestClient;
-
-	@Autowired
-	EmployeeService employeeService;
 	
 	@Autowired
 	EmployeeRepository employeeRepository;
+	
+	@Autowired
+	EmployeeMapper employeeMapper;
 	
 	@Autowired
 	CompanyRepository companyRepository;
@@ -46,13 +54,61 @@ public class EmployeeControllerIT {
 	@BeforeEach
 	public void init() {
 		employeeRepository.deleteAll();
+//		initDB();
+	}
+	
+	private void initDB() {
+		
+		position = new Position("fejlesztő", Qualification.UNIVERSITY);
+		position = positionRepository.save(position);
+		
+		List<Employee> employees = new ArrayList<>();
+		
+		Employee employee1 = new Employee(null, "Kiss Kázmér", 350000, LocalDateTime.of(2015, 10, 1, 8, 0, 0));
+		employee1.setPosition(position);
+		employeeRepository.save(employee1);
+		employees.add(employee1);
+		
+		Employee employee2 = new Employee(null, "Nagy Lajos", 286000, LocalDateTime.of(2015, 10, 1, 8, 0, 0));
+		employee2.setPosition(position);
+		employeeRepository.save(employee2);
+		employees.add(employee2);
+		
+		Company company1 = new Company(null, 123, "Kovács Kft.", "1010. Budapest, Harangvirág utca 12.", employees); 
+		companyRepository.save(company1);	
+		
+		for (Employee employee3 : company1.getEmployees()) {
+			employee3.setCompany(company1);
+			employeeRepository.save(employee3);
+		}
+		
+		employees.clear();
+		
+		Employee employee4 = new Employee(null, "Meta Flóra", 320000, LocalDateTime.of(2020, 4, 1, 8, 0, 0));
+		employee4.setPosition(position);
+		employeeRepository.save(employee4);
+		employees.add(employee4);
+		
+		Employee employee5 = new Employee(null, "Minden Áron", 290000, LocalDateTime.of(2021, 5, 20, 8, 0, 0));
+		employee5.setPosition(position);
+		employeeRepository.save(employee5);
+		employees.add(employee5);
+
+		Company company2 = new Company(null, 456, "Fa faragó Kft.", "7630. Pécs, Basamalom út 84.", employees); 
+		companyRepository.save(company2);
+		
+		for (Employee employee6 : company2.getEmployees()) {
+			employee6.setCompany(company2);
+			employeeRepository.save(employee6);
+		}
+		
 	}
 	
 	@Test
 	void testThatNewValidEmployeeCanBeSaved() throws Exception {
 		List<EmployeeDto> employeesBefore = getAllEmployees();
 
-		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "fejlesztő", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
 		
 		saveEmployee(newEmployee)
 		.expectStatus()
@@ -133,22 +189,78 @@ public class EmployeeControllerIT {
 	}
 	
 	@Test
-	void testFindEmployeesByExample() throws Exception {
+	void testFindEmployeesById() throws Exception {
+		
+		initDB();
 
-		Employee employee = new Employee(0L, "Kiss Márton", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
-		employee.setCompany(companyRepository.findAll().get(0));
-		employee.setPosition(positionRepository.findAll().get(0));
+//		Employee employee1 = new Employee(null, "Kiss Kázmér", 350000, LocalDateTime.of(2015, 10, 1, 8, 0, 0));
 		
-		List<EmployeeDto> employees = findEmployeesByExample(employee);
+		Employee exampleEmployee = new Employee();
+		exampleEmployee.setName("Kiss Kázmér");
 		
-		assertThat(employees.stream().map(EmployeeDto::getId).collect(Collectors.toList())).containsExactly(employee.getEmployeeId());
+		List<Employee> realEmployees = employeeRepository.findByName("Kiss Kázmér");
+		
+		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+		
+		assertThat(employees.size()).isEqualTo(1);
+		assertThat(realEmployees.size()).isEqualTo(1);
+		assertThat(employees.get(0)).isEqualTo(realEmployees.get(0));
+	
+	}
+	
+	@Test
+	void testFindEmployeesByName() throws Exception {
+		
+		initDB();
+		
+		Employee exampleEmployee = new Employee();
+		exampleEmployee.setName("M");
+		
+		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+		
+		assertThat(employees.size()).isEqualTo(2);
+	
+	}
+	
+	@Test
+	void testFindEmployeesBySalary() throws Exception {
+		
+		initDB();
+		
+		/**
+		 * 300.000 between 285.000 and 315.000
+		 */
+		
+		Employee exampleEmployee = new Employee();
+		exampleEmployee.setSalary(300000);
+		
+		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+		
+		assertThat(employees.size()).isEqualTo(2);
+	
+	}
+	
+	@Test
+	void testFindEmployeesByDateOfStartWork() throws Exception {
+		
+		initDB();
+		
+		// 2015, 10, 1, 8, 0, 0
+		
+		Employee exampleEmployee = new Employee();
+		exampleEmployee.setDateOfStartWork(LocalDateTime.of(2015, 10, 1, 8, 0, 0));
+		
+		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+		
+		assertThat(employees.size()).isEqualTo(2);
 	
 	}
 	
 	private List<EmployeeDto> findEmployeesByExample(Employee employee) {
 		List<EmployeeDto> responseList = webTestClient
-				.get()
-				.uri(BASE_URI + "/findEmployees")
+				.post()
+				.uri(BASE_URI + "/byExample")
+				.bodyValue(employee)
 				.exchange()
 				.expectStatus()
 				.isOk()

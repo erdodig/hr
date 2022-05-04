@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import hu.webuni.hr.dodi.model.Employee;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
+import hu.webuni.hr.dodi.repository.PositionRepository;
 
 @Service
 public abstract class AbstractEmployeeService implements EmployeeService {
@@ -19,15 +21,22 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
+	@Autowired
+	PositionRepository positionRepository;
+	
+	@Transactional
 	@Override
 	public Employee save(Employee employee) {
+		positionRepository.save(employee.getPosition());
 		return employeeRepository.save(employee);
 	}
 
+	@Transactional
 	@Override
 	public Employee update(Employee employee) {
 		if(!employeeRepository.existsById(employee.getEmployeeId()))
 			return null;
+		positionRepository.save(employee.getPosition());
 		return employeeRepository.save(employee);
 	}
 
@@ -50,15 +59,24 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 	public List<Employee> findEmployeesByExample(Employee employee) {
 
 		Long id = employee.getEmployeeId();
+		
 		String employeeName = employee.getName();
-		String positionName = employee.getPosition().getName();
+		
+		String positionName = null;		
+		if (employee.getPosition() != null)
+			 positionName = employee.getPosition().getName();
+		
 		int salary = employee.getSalary();
+		
 		LocalDateTime dateOfStartWork = employee.getDateOfStartWork();
-		String companyName = employee.getCompany().getName();
+		
+		String companyName = null;
+		if (employee.getCompany() != null)
+			companyName = employee.getCompany().getName();
 		
 		Specification<Employee> spec = Specification.where(null);
 		
-		if (id > 0)
+		if (id != null)
 			spec = spec.and(EmployeeSpecifications.hasId(id));
 		
 		if (StringUtils.hasText(employeeName))
@@ -76,7 +94,7 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 		if (salary > 0)
 			spec = spec.and(EmployeeSpecifications.hasSalary(salary));
 			
-		return employeeRepository.findAll(spec, Sort.by("id"));
+		return employeeRepository.findAll(spec, Sort.by("employeeId"));
 	}
 	
 }

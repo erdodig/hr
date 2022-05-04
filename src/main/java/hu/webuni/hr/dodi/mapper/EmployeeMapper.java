@@ -11,8 +11,6 @@ import hu.webuni.hr.dodi.model.Employee;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
-	
-	List<EmployeeDto> employeesToDtos(List<Employee> employees);
 
 	@Mapping(source = "employeeId", target = "id")
 	@Mapping(source = "position.name", target = "title")
@@ -23,6 +21,8 @@ public interface EmployeeMapper {
 	@InheritInverseConfiguration
 	@Mapping(target = "company.companyType", ignore = true)
 	Employee dtoToEmployee(EmployeeDto employeeDto);
+	
+	List<EmployeeDto> employeesToDtos(List<Employee> employees);
 
 	List<Employee> dtosToEmployees(List<EmployeeDto> employees);
 

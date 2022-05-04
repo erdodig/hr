@@ -3,6 +3,7 @@ package hu.webuni.hr.dodi.web;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,12 +23,17 @@ import hu.webuni.hr.dodi.mapper.CompanyMapper;
 import hu.webuni.hr.dodi.mapper.EmployeeMapper;
 import hu.webuni.hr.dodi.model.AverageSalaryByPosition;
 import hu.webuni.hr.dodi.model.Company;
+import hu.webuni.hr.dodi.model.Employee;
 import hu.webuni.hr.dodi.repository.CompanyRepository;
+import hu.webuni.hr.dodi.repository.EmployeeRepository;
 import hu.webuni.hr.dodi.service.CompanyService;
 
 @RestController
 @RequestMapping("/api/companies")
 public class CompanyController {
+	
+	@Autowired
+	EmployeeRepository employeeRepository;
 	
 	private CompanyMapper companyMapper;
 	private CompanyService companyService;
@@ -43,13 +49,7 @@ public class CompanyController {
 		this.companyRepository = companyRepository;
 	}
 
-	// 1. megoldás
 	@GetMapping
-//	public List<CompanyDto> getAll(@RequestParam(required = false) Boolean full) {
-//		List<Company> companies = companyService.findAll();
-//		return mapCompanies(companies, full);
-//	}
-
 	public List<CompanyDto> getAll(@RequestParam(required = false) Boolean full) {
 		
 		List<Company> companies = null;
@@ -57,10 +57,21 @@ public class CompanyController {
 		boolean notfull = (full == null || !full);
 		if (notfull) 			
 			companies = companyService.findAll();
-		else
+		else {
 			companies = companyRepository.findAllWithEmployees();
+			
+			/**
+			 * nem szép megoldás de ezt máshogy nem tudtam megoldani, hogy a position betöltődjön
+			 * próbáltam a CompanyRepository-ban mindennel, de nem sikerült 
+			 */
+			for (Company company : companies) {
+				for (Employee employee : company.getEmployees()) {
+					employee.setPosition(employeeRepository.findById(employee.getEmployeeId()).get().getPosition());
+				}
+			}
+		}
 		
-		return mapCompanies(companies, notfull);
+		return mapCompanies(companies, !notfull);
 	}
 	
 	private List<CompanyDto> mapCompanies(List<Company> companies, Boolean full) {
@@ -71,25 +82,9 @@ public class CompanyController {
 		}
 	}
 
-	// 2. megoldás: JsonView annotációval
-//	@GetMapping(params = "full=true")
-//	public List<CompanyDto> getAllFull() {
-//		return new ArrayList<>(companies.values());
-//	}
-
 	private boolean isFull(Boolean full) {
 		return full != null && full;
 	}
-
-//	@JsonView(View.BaseData.class)
-//	@GetMapping
-//	public List<CompanyDto> getAllNonFull() {
-//		return new ArrayList<>(companies.values());
-//	}
-
-//	private CompanyDto mapCompanyWithoutEmployees(CompanyDto c) {
-//		return new CompanyDto(c.getId(), c.getRegistrationNumber(), c.getName(), c.getAddress(), null);
-//	}
 
 	@GetMapping("/{id}")
 	public CompanyDto getById(@PathVariable long id, @RequestParam(required = false) Boolean full) {
@@ -124,13 +119,6 @@ public class CompanyController {
       companyService.delete(id);
 	}
 
-//	private CompanyDto findByIdOrThrow(long id) {
-//		CompanyDto company = companies.get(id);
-//		if (company == null)
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-//		return company;
-//	}
-	
 	@PostMapping("/{companyId}/employees")
 	public CompanyDto addNewEmployee(@PathVariable long companyId, @RequestBody EmployeeDto employeeDto) {
 		try {
@@ -141,12 +129,14 @@ public class CompanyController {
 		}
 	}
 
-
-
 	@DeleteMapping("/{companyId}/employees/{empId}")
 	public CompanyDto deleteEmployee(@PathVariable long companyId, @PathVariable long empId) {
+		
 		try {
-			return companyMapper.companyToDto(companyService.deleteEmployee(companyId, empId));
+			
+			Company company = companyService.deleteEmployee(companyId, empId);
+			return companyMapper.companyToDto(company);
+			
 		} catch (NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}

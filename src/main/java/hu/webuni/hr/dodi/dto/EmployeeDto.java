@@ -1,6 +1,7 @@
 package hu.webuni.hr.dodi.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
@@ -88,6 +89,23 @@ public class EmployeeDto {
 
 	public void setCompany(CompanyDto company) {
 		this.company = company;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmployeeDto other = (EmployeeDto) obj;
+		return id == other.id;
 	}
 
 }

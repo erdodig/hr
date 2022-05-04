@@ -1,6 +1,7 @@
 package hu.webuni.hr.dodi.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,9 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	@EntityGraph("Company.full")
 	@Query("SELECT DISTINCT c FROM Company c")
 	public List<Company> findAllWithEmployees();
+
+	@EntityGraph("Company.full")
+	@Query("SELECT DISTINCT c FROM Company c WHERE c.id=:id")
+	public Optional<Company> findByIdWithEmployees(long id);
+	
 }

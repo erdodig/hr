@@ -1,6 +1,7 @@
 package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -82,12 +83,17 @@ public class Employee {
 		this.company = company;
 	}
 
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((employeeId == null) ? 0 : employeeId.hashCode());
-		return result;
+		return Objects.hash(employeeId);
 	}
 
 	@Override
@@ -99,23 +105,13 @@ public class Employee {
 		if (getClass() != obj.getClass())
 			return false;
 		Employee other = (Employee) obj;
-		if (employeeId == null) {
-			if (other.employeeId != null)
-				return false;
-		} else if (!employeeId.equals(other.employeeId))
-			return false;
-		return true;
+		return Objects.equals(employeeId, other.employeeId);
 	}
 
-	public Position getPosition() {
-		return position;
+	@Override
+	public String toString() {
+		return "Employee [employeeId=" + employeeId + ", name=" + name + ", salary=" + salary + ", dateOfStartWork="
+				+ dateOfStartWork + ", company=" + company + ", position=" + position + "]";
 	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-	
-	
-
 	
 }

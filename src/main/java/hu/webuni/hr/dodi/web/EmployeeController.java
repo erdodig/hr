@@ -24,6 +24,7 @@ import hu.webuni.hr.dodi.dto.EmployeeDto;
 import hu.webuni.hr.dodi.mapper.EmployeeMapper;
 import hu.webuni.hr.dodi.model.Employee;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
+import hu.webuni.hr.dodi.repository.PositionRepository;
 import hu.webuni.hr.dodi.service.EmployeeService;
 
 @RestController
@@ -38,7 +39,6 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
-
 	
 	@GetMapping
 	public List<EmployeeDto> getEmployees(@RequestParam(required = false) Integer minSalary, Pageable pageable) {
@@ -58,12 +58,6 @@ public class EmployeeController {
 		}
 		return employeeMapper.employeesToDtos(employees);
 	}
-	
-	//1. megoldás
-//	@GetMapping(params = "minSalary")
-//	public List<EmployeeDto> getAllByMinSalary(@RequestParam int minSalary){
-//		return employees.values().stream().filter(e -> e.getSalary() > minSalary).collect(Collectors.toList());
-//	}
 	
 	@GetMapping("/{id}")
 	public EmployeeDto getById(@PathVariable long id) {
@@ -103,7 +97,7 @@ public class EmployeeController {
 		return employeeService.getPayRaisePercent(employee);
 	}
 	
-	@PostMapping("/findEmployees")
+	@PostMapping("/byExample")
 	public List<EmployeeDto> getEmployeesByExample(@RequestBody Employee employee) {
 		return employeeMapper.employeesToDtos(employeeService.findEmployeesByExample(employee));
 	}

@@ -133,17 +133,17 @@ public class HolidayRequestControllerIT {
 		
 		createTestState(holidayRequests);
 		
-		HolidayRequestByExample example = new HolidayRequestByExample();
-		example.setRequestName("kis");
+		HolidayRequestByExample example1 = new HolidayRequestByExample();
+		example1.setRequestName("kis");
 		
-		List<HolidayRequestDto> holidayRequestDtos = findAllHolidayRequestByExample(example, 0, 5);
+		List<HolidayRequestDto> holidayRequestDtos = findAllHolidayRequestByExample(example1, 0, 5);
 		
 		assertThat(holidayRequestDtos.size()).isEqualTo(2);	
 		
-		example = new HolidayRequestByExample();
-		example.setLeaderName("nagy");
+		HolidayRequestByExample example2 = new HolidayRequestByExample();
+		example2.setLeaderName("nagy");
 		
-		holidayRequestDtos = findAllHolidayRequestByExample(example, 0, 5);
+		holidayRequestDtos = findAllHolidayRequestByExample(example2, 0, 5);
 		
 		assertThat(holidayRequestDtos.size()).isEqualTo(1);	
 	}
@@ -155,19 +155,19 @@ public class HolidayRequestControllerIT {
 		
 		createTestState(holidayRequests);
 		
-		HolidayRequestByExample example = new HolidayRequestByExample();
-		example.setFromRequestTime(LocalDateTime.of(2022, 3, 10, 0, 0, 0));
-		example.setToRequestTime(LocalDateTime.of(2022, 3, 16, 0, 0, 0));
+		HolidayRequestByExample example1 = new HolidayRequestByExample();
+		example1.setFromRequestTime(LocalDateTime.of(2022, 3, 10, 0, 0, 0));
+		example1.setToRequestTime(LocalDateTime.of(2022, 3, 16, 0, 0, 0));
 		
-		List<HolidayRequestDto> holidayRequestDtos = findAllHolidayRequestByExample(example, 0, 5);
+		List<HolidayRequestDto> holidayRequestDtos = findAllHolidayRequestByExample(example1, 0, 5);
 		
 		assertThat(holidayRequestDtos.size()).isEqualTo(2);	
 		
-		example = new HolidayRequestByExample();
-		example.setFromRequestTime(LocalDateTime.of(2022, 3, 16, 0, 0, 0));
-		example.setToRequestTime(LocalDateTime.of(2022, 4, 2, 0, 0, 0));
+		HolidayRequestByExample example2 = new HolidayRequestByExample();
+		example2.setFromRequestTime(LocalDateTime.of(2022, 3, 16, 0, 0, 0));
+		example2.setToRequestTime(LocalDateTime.of(2022, 4, 2, 0, 0, 0));
 		
-		holidayRequestDtos = findAllHolidayRequestByExample(example, 0, 5);
+		holidayRequestDtos = findAllHolidayRequestByExample(example2, 0, 5);
 		
 		assertThat(holidayRequestDtos.size()).isEqualTo(1);	
 	}
@@ -222,20 +222,20 @@ public class HolidayRequestControllerIT {
 		Employee employee3 = createEmployee("fejlesztő", Qualification.HIGH_SCHOOL, 
 				"Nagy Ádám", 280000, LocalDateTime.of(2020, 07, 01, 8, 0, 0));
 		
-		HolidayRequest holidayRequest = new HolidayRequest(LocalDate.of(2022, 3, 10), 
+		HolidayRequest holidayRequest1 = new HolidayRequest(LocalDate.of(2022, 3, 10), 
 				LocalDate.of(2022, 3, 20), LocalDateTime.of(2022, 3, 10, 8, 0, 0), employee1);
-		holidayRequest = holidayRequestService.save(holidayRequest);
-		holidayRequests.add(holidayRequest);
+		holidayRequest1 = holidayRequestService.save(holidayRequest1);
+		holidayRequests.add(holidayRequest1);
 		
-		holidayRequest = new HolidayRequest(LocalDate.of(2022, 3, 15), 
+		HolidayRequest holidayRequest2 = new HolidayRequest(LocalDate.of(2022, 3, 15), 
 				LocalDate.of(2022, 3, 25), LocalDateTime.of(2022, 3, 15, 8, 0, 0), employee2);
-		holidayRequest = holidayRequestService.save(holidayRequest);
-		holidayRequests.add(holidayRequest);
+		holidayRequest2 = holidayRequestService.save(holidayRequest2);
+		holidayRequests.add(holidayRequest2);
 		
-		holidayRequest = new HolidayRequest(LocalDate.of(2022, 4, 1), 
+		HolidayRequest holidayRequest3 = new HolidayRequest(LocalDate.of(2022, 4, 1), 
 				LocalDate.of(2022, 4, 10), LocalDateTime.of(2022, 4, 1, 8, 0, 0), employee3);
-		holidayRequest = holidayRequestService.save(holidayRequest);
-		holidayRequests.add(holidayRequest);
+		holidayRequest3 = holidayRequestService.save(holidayRequest3);
+		holidayRequests.add(holidayRequest3);
 		
 		return holidayRequests;
 		

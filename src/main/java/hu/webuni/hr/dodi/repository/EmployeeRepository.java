@@ -31,8 +31,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 			+ "AND e2.salary < :minSalary"
 			+ ")")
 	void updateSalaries(String positionName, int minSalary, long companyId);
-	
-//	@EntityGraph(attributePaths = "employees")
-//	List<Employee> findByPosition(Position position);
+
+
+	List<Employee> findByName(String name);
 	
 }
