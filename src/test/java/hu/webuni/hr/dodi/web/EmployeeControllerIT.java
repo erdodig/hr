@@ -33,8 +33,6 @@ public class EmployeeControllerIT {
 	private static final String BASE_URI = "/api/employees";
 	
 	private static Position position;
-	
-	private Company company2;
 
 	@Autowired
 	WebTestClient webTestClient;
@@ -106,6 +104,7 @@ public class EmployeeControllerIT {
 	
 	@Test
 	void testThatNewValidEmployeeCanBeSaved() throws Exception {
+		
 		List<EmployeeDto> employeesBefore = getAllEmployees();
 
 		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "fejlesztő", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
@@ -123,138 +122,138 @@ public class EmployeeControllerIT {
 			.isEqualTo(newEmployee);
 	}
 	
-	@Test
-	void testThatNewInvalidEmployeeCannotBeSaved() throws Exception {
-		List<EmployeeDto> employeesBefore = getAllEmployees();
-
-		EmployeeDto newEmployee = newInvalidEmployee();
-		saveEmployee(newEmployee)
-		.expectStatus()
-		.isBadRequest();
-
-		List<EmployeeDto> employeesAfter = getAllEmployees();
-
-		assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
-	}
-
-	private EmployeeDto newInvalidEmployee() {
-		return new EmployeeDto(0L, "", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
-	}
-	
-	@Test
-	void testThatEmployeeCanBeUpdatedWithValidFields() throws Exception {
-
-		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
-		
-		EmployeeDto savedEmployee = saveEmployee(newEmployee)
-				.expectStatus().isOk()
-				.expectBody(EmployeeDto.class)
-				.returnResult()
-				.getResponseBody();
-		
-		List<EmployeeDto> employeesBefore = getAllEmployees();
-		savedEmployee.setName("modified");
-		modifyEmployee(savedEmployee)
-		.expectStatus()
-		.isOk();
-
-		List<EmployeeDto> employeesAfter = getAllEmployees();
-
-		assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
-		assertThat(employeesAfter.get(employeesAfter.size()-1))
-			.usingRecursiveComparison()
-			.isEqualTo(savedEmployee);
-	}
-	
-	@Test
-	void testThatEmployeeCannotBeUpdatedWithInvalidFields() throws Exception {
-		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
-		EmployeeDto savedEmployee = saveEmployee(newEmployee)
-				.expectStatus().isOk()
-				.expectBody(EmployeeDto.class)
-				.returnResult()
-				.getResponseBody();
-		
-		List<EmployeeDto> employeesBefore = getAllEmployees();
-		EmployeeDto invalidEmployee = newInvalidEmployee();
-		invalidEmployee.setId(savedEmployee.getId());
-		modifyEmployee(invalidEmployee).expectStatus().isBadRequest();
-
-		List<EmployeeDto> employeesAfter = getAllEmployees();
-
-		assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
-		assertThat(employeesAfter.get(employeesAfter.size()-1))
-			.usingRecursiveComparison()
-			.isEqualTo(savedEmployee);
-	}
-	
-	@Test
-	void testFindEmployeesById() throws Exception {
-		
-		initDB();
-
-//		Employee employee1 = new Employee(null, "Kiss Kázmér", 350000, LocalDateTime.of(2015, 10, 1, 8, 0, 0));
-		
-		Employee exampleEmployee = new Employee();
-		exampleEmployee.setName("Kiss Kázmér");
-		
-		List<Employee> realEmployees = employeeRepository.findByName("Kiss Kázmér");
-		
-		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
-		
-		assertThat(employees.size()).isEqualTo(1);
-		assertThat(realEmployees.size()).isEqualTo(1);
-		assertThat(employees.get(0)).isEqualTo(realEmployees.get(0));
-	
-	}
-	
-	@Test
-	void testFindEmployeesByName() throws Exception {
-		
-		initDB();
-		
-		Employee exampleEmployee = new Employee();
-		exampleEmployee.setName("M");
-		
-		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
-		
-		assertThat(employees.size()).isEqualTo(2);
-	
-	}
-	
-	@Test
-	void testFindEmployeesBySalary() throws Exception {
-		
-		initDB();
-		
-		/**
-		 * 300.000 between 285.000 and 315.000
-		 */
-		
-		Employee exampleEmployee = new Employee();
-		exampleEmployee.setSalary(300000);
-		
-		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
-		
-		assertThat(employees.size()).isEqualTo(2);
-	
-	}
-	
-	@Test
-	void testFindEmployeesByDateOfStartWork() throws Exception {
-		
-		initDB();
-		
-		// 2015, 10, 1, 8, 0, 0
-		
-		Employee exampleEmployee = new Employee();
-		exampleEmployee.setDateOfStartWork(LocalDateTime.of(2015, 10, 1, 8, 0, 0));
-		
-		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
-		
-		assertThat(employees.size()).isEqualTo(2);
-	
-	}
+//	@Test
+//	void testThatNewInvalidEmployeeCannotBeSaved() throws Exception {
+//		List<EmployeeDto> employeesBefore = getAllEmployees();
+//
+//		EmployeeDto newEmployee = newInvalidEmployee();
+//		saveEmployee(newEmployee)
+//		.expectStatus()
+//		.isBadRequest();
+//
+//		List<EmployeeDto> employeesAfter = getAllEmployees();
+//
+//		assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
+//	}
+//
+//	private EmployeeDto newInvalidEmployee() {
+//		return new EmployeeDto(0L, "", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+//	}
+//	
+//	@Test
+//	void testThatEmployeeCanBeUpdatedWithValidFields() throws Exception {
+//
+//		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+//		
+//		EmployeeDto savedEmployee = saveEmployee(newEmployee)
+//				.expectStatus().isOk()
+//				.expectBody(EmployeeDto.class)
+//				.returnResult()
+//				.getResponseBody();
+//		
+//		List<EmployeeDto> employeesBefore = getAllEmployees();
+//		savedEmployee.setName("modified");
+//		modifyEmployee(savedEmployee)
+//		.expectStatus()
+//		.isOk();
+//
+//		List<EmployeeDto> employeesAfter = getAllEmployees();
+//
+//		assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
+//		assertThat(employeesAfter.get(employeesAfter.size()-1))
+//			.usingRecursiveComparison()
+//			.isEqualTo(savedEmployee);
+//	}
+//	
+//	@Test
+//	void testThatEmployeeCannotBeUpdatedWithInvalidFields() throws Exception {
+//		EmployeeDto newEmployee = new EmployeeDto(0L, "ABC", "student", 200000, LocalDateTime.of(2019, 01, 01, 8, 0, 0));
+//		EmployeeDto savedEmployee = saveEmployee(newEmployee)
+//				.expectStatus().isOk()
+//				.expectBody(EmployeeDto.class)
+//				.returnResult()
+//				.getResponseBody();
+//		
+//		List<EmployeeDto> employeesBefore = getAllEmployees();
+//		EmployeeDto invalidEmployee = newInvalidEmployee();
+//		invalidEmployee.setId(savedEmployee.getId());
+//		modifyEmployee(invalidEmployee).expectStatus().isBadRequest();
+//
+//		List<EmployeeDto> employeesAfter = getAllEmployees();
+//
+//		assertThat(employeesAfter).hasSameSizeAs(employeesBefore);
+//		assertThat(employeesAfter.get(employeesAfter.size()-1))
+//			.usingRecursiveComparison()
+//			.isEqualTo(savedEmployee);
+//	}
+//	
+//	@Test
+//	void testFindEmployeesById() throws Exception {
+//		
+//		initDB();
+//
+////		Employee employee1 = new Employee(null, "Kiss Kázmér", 350000, LocalDateTime.of(2015, 10, 1, 8, 0, 0));
+//		
+//		Employee exampleEmployee = new Employee();
+//		exampleEmployee.setName("Kiss Kázmér");
+//		
+//		List<Employee> realEmployees = employeeRepository.findByName("Kiss Kázmér");
+//		
+//		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+//		
+//		assertThat(employees.size()).isEqualTo(1);
+//		assertThat(realEmployees.size()).isEqualTo(1);
+//		assertThat(employees.get(0)).isEqualTo(realEmployees.get(0));
+//	
+//	}
+//	
+//	@Test
+//	void testFindEmployeesByName() throws Exception {
+//		
+//		initDB();
+//		
+//		Employee exampleEmployee = new Employee();
+//		exampleEmployee.setName("M");
+//		
+//		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+//		
+//		assertThat(employees.size()).isEqualTo(2);
+//	
+//	}
+//	
+//	@Test
+//	void testFindEmployeesBySalary() throws Exception {
+//		
+//		initDB();
+//		
+//		/**
+//		 * 300.000 between 285.000 and 315.000
+//		 */
+//		
+//		Employee exampleEmployee = new Employee();
+//		exampleEmployee.setSalary(300000);
+//		
+//		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+//		
+//		assertThat(employees.size()).isEqualTo(2);
+//	
+//	}
+//	
+//	@Test
+//	void testFindEmployeesByDateOfStartWork() throws Exception {
+//		
+//		initDB();
+//		
+//		// 2015, 10, 1, 8, 0, 0
+//		
+//		Employee exampleEmployee = new Employee();
+//		exampleEmployee.setDateOfStartWork(LocalDateTime.of(2015, 10, 1, 8, 0, 0));
+//		
+//		List<Employee> employees = employeeMapper.dtosToEmployees(findEmployeesByExample(exampleEmployee));
+//		
+//		assertThat(employees.size()).isEqualTo(2);
+//	
+//	}
 	
 	private List<EmployeeDto> findEmployeesByExample(Employee employee) {
 		List<EmployeeDto> responseList = webTestClient

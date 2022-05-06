@@ -2,6 +2,7 @@ package hu.webuni.hr.dodi.dto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
@@ -29,6 +30,8 @@ public class EmployeeDto {
 	
 	private String password;
 	
+	private Set<String> roles;
+	
 	private EmployeeDto leader;
 
 	public EmployeeDto() {
@@ -36,7 +39,7 @@ public class EmployeeDto {
 	}
 
 	public EmployeeDto(long id, String name, String title, int salary, LocalDateTime entryDate) {
-//		this(id, name, title, salary, entryDate, null, null, null);
+//		this(id, name, title, salary, entryDate);
 		this.id = id;
 		this.name = name;
 		this.title = title;
@@ -45,7 +48,7 @@ public class EmployeeDto {
 	}
 
 	public EmployeeDto(long id, String name, String title, int salary, LocalDateTime entryDate, 
-			String username, String password/*, EmployeeDto leader*/) {
+			String username, String password, Set<String> roles, EmployeeDto leader) {
 		this.id = id;
 		this.name = name;
 		this.title = title;
@@ -53,7 +56,8 @@ public class EmployeeDto {
 		this.entryDate = entryDate;
 		this.username = username;
 		this.password = password;
-//		this.leader = leader;
+		this.roles = roles;
+		this.leader = leader;
 	}
 
 	public long getId() {
@@ -114,6 +118,14 @@ public class EmployeeDto {
 
 	public EmployeeDto getLeader() {
 		return leader;
+	}
+
+	public Set<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
 	}
 
 	public void setLeader(EmployeeDto leader) {

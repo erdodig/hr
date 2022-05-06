@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hu.webuni.hr.dodi.model.Company;
 import hu.webuni.hr.dodi.model.Employee;
-import hu.webuni.hr.dodi.model.HrUser;
 import hu.webuni.hr.dodi.model.Position;
 import hu.webuni.hr.dodi.model.PositionDetailsByCompany;
 import hu.webuni.hr.dodi.model.Qualification;
@@ -49,18 +48,27 @@ public class InitDbService {
 		
 		Position developer = positionRepository.save(new Position("fejlesztő", Qualification.UNIVERSITY));
 		Position tester = positionRepository.save(new Position("tesztelő", Qualification.HIGH_SCHOOL));
+
+		Employee newEmployee3 = new Employee(null, "Leader Péter",200000, LocalDateTime.now()
+				, "leader", passwordEncoder.encode("pass"), Set.of("admin", "user"), null);
+		newEmployee3.setPosition(developer);
+		employeeRepository.save(newEmployee3);
 		
-//		Employee newEmployee1 = employeeRepository.save(new Employee(null, "ssdf", 200000, LocalDateTime.now()));
-		Employee newEmployee1 = new Employee(null, "ssdf", 200000, LocalDateTime.now(), "user", "pass");
+		Employee newEmployee1 = new Employee(null, "Kiss János", 200000, LocalDateTime.now()
+				, "kiss", passwordEncoder.encode("pass"), Set.of("user"), newEmployee3);
 		newEmployee1.setPosition(developer);
+		newEmployee1.setLeader(newEmployee3);
 		employeeRepository.save(newEmployee1);
-//		userRepository.save(new HrUser("admin", passwordEncoder.encode("pass"), Set.of("admin", "user")));
 		
-//		Employee newEmployee2 = employeeRepository.save(new Employee(null, "t35",200000, LocalDateTime.now()));
-//		newEmployee2.setPosition(tester);
+		Employee newEmployee2 = new Employee(null, "Nagy János",200000, LocalDateTime.now()
+				, "nagy", passwordEncoder.encode("pass"), Set.of("user"), newEmployee3);
+		newEmployee2.setPosition(tester);
+		newEmployee2.setLeader(newEmployee3);
+		employeeRepository.save(newEmployee2);
 		
-		Company newCompany = companyRepository.save(new Company(null, 10, "sdfsd", "", null));
-//		newCompany.addEmployee(newEmployee2);
+		Company newCompany = companyRepository.save(new Company(null, 10, "Fa vágó Kft.", "", null));
+		newCompany.addEmployee(newEmployee3);
+		newCompany.addEmployee(newEmployee2);
 		newCompany.addEmployee(newEmployee1);
 		
 		PositionDetailsByCompany pd = new PositionDetailsByCompany();

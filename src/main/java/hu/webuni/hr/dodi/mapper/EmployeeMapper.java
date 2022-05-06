@@ -16,12 +16,14 @@ public interface EmployeeMapper {
 	@Mapping(source = "position.name", target = "title")
 	@Mapping(source = "dateOfStartWork", target = "entryDate")
 	@Mapping(target = "company.employees", ignore = true)
-//	@Mapping(target = "leader", ignore = true)
+	@Mapping(source = "leader.employeeId", target = "leader.id")
+	@Mapping(source = "leader.position.name", target = "leader.title")
+	@Mapping(source = "leader.dateOfStartWork", target = "leader.entryDate")
 	EmployeeDto employeeToDto(Employee employee);
 
 	@InheritInverseConfiguration
 	@Mapping(target = "company.companyType", ignore = true)
-//	@Mapping(target = "leader", ignore = true)
+	@Mapping(target = "leader.company.companyType", ignore = true)
 	Employee dtoToEmployee(EmployeeDto employeeDto);
 	
 	List<EmployeeDto> employeesToDtos(List<Employee> employees);

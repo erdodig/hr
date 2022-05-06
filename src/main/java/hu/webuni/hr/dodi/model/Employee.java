@@ -2,7 +2,9 @@ package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,6 +34,10 @@ public class Employee {
 	
 	private String password;
 	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<String> roles;
+	
+	@ManyToOne
 	private Employee leader;
 	
 	public Employee() {
@@ -43,7 +49,7 @@ public class Employee {
 	}
 
 	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork) {
-//		this(employeeId, name, salary, dateOfStartWork, null, null, null);
+//		this(employeeId, name, salary, dateOfStartWork);
 		this.employeeId = employeeId;
 		this.name = name;
 		this.salary = salary;
@@ -51,14 +57,15 @@ public class Employee {
 	}
 
 	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork, 
-			String username, String password/*, Employee leader*/) {
+			String username, String password, Set<String> roles, Employee leader) {
 		this.employeeId = employeeId;
 		this.name = name;
 		this.salary = salary;
 		this.dateOfStartWork = dateOfStartWork;
 		this.username = username;
 		this.password = password;
-//		this.leader = leader;
+		this.roles = roles;
+		this.leader = leader;
 	}
 
 	public Long getEmployeeId() {
@@ -123,6 +130,14 @@ public class Employee {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Set<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
 	}
 
 	public Employee getLeader() {

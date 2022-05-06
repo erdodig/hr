@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,5 +35,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
 
 	List<Employee> findByName(String name);
+
+	@EntityGraph(attributePaths = "roles")
+	@Query("SELECT e FROM Employee e")
+	@Override
+	public List<Employee> findAll();
 	
 }

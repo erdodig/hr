@@ -42,6 +42,7 @@ public class EmployeeController {
 	
 	@GetMapping
 	public List<EmployeeDto> getEmployees(@RequestParam(required = false) Integer minSalary, Pageable pageable) {
+		
 		List<Employee> employees = null;
 		if(minSalary == null) {
 			employees = employeeService.findAll();

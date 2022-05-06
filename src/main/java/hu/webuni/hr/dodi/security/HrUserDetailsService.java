@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import hu.webuni.hr.dodi.model.HrUser;
+import hu.webuni.hr.dodi.model.Employee;
 import hu.webuni.hr.dodi.repository.UserRepository;
 
 @Service
@@ -22,9 +22,10 @@ public class HrUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		HrUser hrUser = userRepository.findById(username)
+		Employee employee = userRepository.findByUsername(username)
 				.orElseThrow(() -> new  UsernameNotFoundException(username));
-		return new User(username, hrUser.getPassword(), hrUser.getRoles().stream()
+		
+		return new User(username, employee.getPassword(), employee.getRoles().stream()
 				.map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 	}
 
