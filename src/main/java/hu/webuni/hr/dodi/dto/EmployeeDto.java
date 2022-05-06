@@ -24,17 +24,36 @@ public class EmployeeDto {
 	private LocalDateTime entryDate;
 	
 	private CompanyDto company;
+	
+	private String username;
+	
+	private String password;
+	
+	private EmployeeDto leader;
 
 	public EmployeeDto() {
 
 	}
 
 	public EmployeeDto(long id, String name, String title, int salary, LocalDateTime entryDate) {
+//		this(id, name, title, salary, entryDate, null, null, null);
 		this.id = id;
 		this.name = name;
 		this.title = title;
 		this.salary = salary;
 		this.entryDate = entryDate;
+	}
+
+	public EmployeeDto(long id, String name, String title, int salary, LocalDateTime entryDate, 
+			String username, String password/*, EmployeeDto leader*/) {
+		this.id = id;
+		this.name = name;
+		this.title = title;
+		this.salary = salary;
+		this.entryDate = entryDate;
+		this.username = username;
+		this.password = password;
+//		this.leader = leader;
 	}
 
 	public long getId() {
@@ -75,6 +94,30 @@ public class EmployeeDto {
 
 	public void setEntryDate(LocalDateTime entryDate) {
 		this.entryDate = entryDate;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public EmployeeDto getLeader() {
+		return leader;
+	}
+
+	public void setLeader(EmployeeDto leader) {
+		this.leader = leader;
 	}
 
 	@Override

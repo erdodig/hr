@@ -1,13 +1,16 @@
 package hu.webuni.hr.dodi.service;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.webuni.hr.dodi.model.Company;
 import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.model.HrUser;
 import hu.webuni.hr.dodi.model.Position;
 import hu.webuni.hr.dodi.model.PositionDetailsByCompany;
 import hu.webuni.hr.dodi.model.Qualification;
@@ -15,6 +18,7 @@ import hu.webuni.hr.dodi.repository.CompanyRepository;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
 import hu.webuni.hr.dodi.repository.PositionDetailsByCompanyRepository;
 import hu.webuni.hr.dodi.repository.PositionRepository;
+import hu.webuni.hr.dodi.repository.UserRepository;
 
 @Service
 public class InitDbService {
@@ -31,20 +35,32 @@ public class InitDbService {
 	@Autowired
 	PositionDetailsByCompanyRepository positionDetailsByCompanyRepository;
 	
+	UserRepository userRepository;
+	
+	PasswordEncoder passwordEncoder;
+	
+	public InitDbService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
+
 	@Transactional
 	public void initDb() {
 		
 		Position developer = positionRepository.save(new Position("fejlesztő", Qualification.UNIVERSITY));
 		Position tester = positionRepository.save(new Position("tesztelő", Qualification.HIGH_SCHOOL));
 		
-		Employee newEmployee1 = employeeRepository.save(new Employee(null, "ssdf", 200000, LocalDateTime.now()));
+//		Employee newEmployee1 = employeeRepository.save(new Employee(null, "ssdf", 200000, LocalDateTime.now()));
+		Employee newEmployee1 = new Employee(null, "ssdf", 200000, LocalDateTime.now(), "user", "pass");
 		newEmployee1.setPosition(developer);
+		employeeRepository.save(newEmployee1);
+//		userRepository.save(new HrUser("admin", passwordEncoder.encode("pass"), Set.of("admin", "user")));
 		
-		Employee newEmployee2 = employeeRepository.save(new Employee(null, "t35",200000, LocalDateTime.now()));
-		newEmployee2.setPosition(tester);
+//		Employee newEmployee2 = employeeRepository.save(new Employee(null, "t35",200000, LocalDateTime.now()));
+//		newEmployee2.setPosition(tester);
 		
 		Company newCompany = companyRepository.save(new Company(null, 10, "sdfsd", "", null));
-		newCompany.addEmployee(newEmployee2);
+//		newCompany.addEmployee(newEmployee2);
 		newCompany.addEmployee(newEmployee1);
 		
 		PositionDetailsByCompany pd = new PositionDetailsByCompany();

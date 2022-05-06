@@ -28,19 +28,37 @@ public class Employee {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Position position;
 	
+	private String username;
+	
+	private String password;
+	
+	private Employee leader;
+	
 	public Employee() {
 	}
 
+	public Employee(int salary, LocalDateTime dateOfStartWork) {
+		this.salary = salary;
+		this.dateOfStartWork = dateOfStartWork;
+	}
+
 	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork) {
+//		this(employeeId, name, salary, dateOfStartWork, null, null, null);
 		this.employeeId = employeeId;
 		this.name = name;
 		this.salary = salary;
 		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	public Employee(int salary, LocalDateTime dateOfStartWork) {
+	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork, 
+			String username, String password/*, Employee leader*/) {
+		this.employeeId = employeeId;
+		this.name = name;
 		this.salary = salary;
 		this.dateOfStartWork = dateOfStartWork;
+		this.username = username;
+		this.password = password;
+//		this.leader = leader;
 	}
 
 	public Long getEmployeeId() {
@@ -89,6 +107,30 @@ public class Employee {
 
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Employee getLeader() {
+		return leader;
+	}
+
+	public void setLeader(Employee leader) {
+		this.leader = leader;
 	}
 
 	@Override
