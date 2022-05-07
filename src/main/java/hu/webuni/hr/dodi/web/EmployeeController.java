@@ -22,9 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import hu.webuni.hr.dodi.dto.EmployeeDto;
 import hu.webuni.hr.dodi.mapper.EmployeeMapper;
+import hu.webuni.hr.dodi.model.Company;
 import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.model.Position;
+import hu.webuni.hr.dodi.repository.CompanyRepository;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
 import hu.webuni.hr.dodi.repository.PositionRepository;
+import hu.webuni.hr.dodi.service.CompanyService;
 import hu.webuni.hr.dodi.service.EmployeeService;
 
 @RestController

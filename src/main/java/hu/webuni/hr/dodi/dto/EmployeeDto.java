@@ -1,6 +1,7 @@
 package hu.webuni.hr.dodi.dto;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class EmployeeDto {
 	
 	private String password;
 	
-	private Set<String> roles;
+	private Set<String> roles = new HashSet<>();
 	
 	private EmployeeDto leader;
 

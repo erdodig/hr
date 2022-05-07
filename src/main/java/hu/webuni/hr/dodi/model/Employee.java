@@ -1,6 +1,7 @@
 package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,9 +36,9 @@ public class Employee {
 	private String password;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
-	private Set<String> roles;
+	private Set<String> roles = new HashSet<>();
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Employee leader;
 	
 	public Employee() {

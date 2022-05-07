@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import hu.webuni.hr.dodi.model.Employee;
+import hu.webuni.hr.dodi.model.Position;
+import hu.webuni.hr.dodi.repository.CompanyRepository;
 import hu.webuni.hr.dodi.repository.EmployeeRepository;
 import hu.webuni.hr.dodi.repository.PositionRepository;
 
@@ -23,6 +25,9 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 	
 	@Autowired
 	PositionRepository positionRepository;
+	
+	@Autowired
+	CompanyRepository companyRepository;
 	
 	@Transactional
 	@Override
@@ -41,8 +46,13 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> findAll() {
-		return employeeRepository.findAll();
+	public List<Employee> findAll() {		
+		List<Employee> employees = employeeRepository.findAll();
+//		for (Employee employee : employees) {
+//			employee.setCompany(companyRepository.findByIdWithEmployees(
+//					employee.getCompany().getId()).get());
+//		}
+		return employees;
 	}
 
 	@Override

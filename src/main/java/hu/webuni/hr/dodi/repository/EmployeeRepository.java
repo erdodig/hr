@@ -36,8 +36,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
 	List<Employee> findByName(String name);
 
-	@EntityGraph(attributePaths = "roles")
-	@Query("SELECT e FROM Employee e")
+	@EntityGraph(attributePaths = {"position"})
+//	@Query("SELECT e FROM Employee e")
 	@Override
 	public List<Employee> findAll();
 	
