@@ -24,7 +24,7 @@ public class HolidayRequestDto {
 	
 	private EmployeeDto requestingEmployee;
 	
-	private HolidayRequestState holidayRequestState;
+	private HolidayRequestState holidayRequestState = HolidayRequestState.REQUEST;;
 	
 	private EmployeeDto leader;
 	
@@ -37,7 +37,6 @@ public class HolidayRequestDto {
 		this.toDate = toDate;
 		this.requestTime = requestTime;
 		this.requestingEmployee = requestingEmployee;
-		this.holidayRequestState = HolidayRequestState.REQUEST;
 	}
 
 	public Long getId() {

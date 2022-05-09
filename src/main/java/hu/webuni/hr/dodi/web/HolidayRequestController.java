@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,8 +43,9 @@ public class HolidayRequestController {
 	@Autowired
 	PositionRepository positionRepository;
 	
+	@PreAuthorize("#holidayRequestDto.requestingEmployee.username == authentication.name")
 	@PostMapping
-	public HolidayRequestDto createOrModifyHolidayRequest(@RequestBody @Valid HolidayRequestDto holidayRequestDto ) {
+	public HolidayRequestDto createOrModifyHolidayRequest(@RequestBody @Valid HolidayRequestDto holidayRequestDto) {
 		
 		if (holidayRequestDto.getFromDate().isAfter(holidayRequestDto.getToDate()))
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -61,8 +63,10 @@ public class HolidayRequestController {
 		}
 	}
 
+	@PreAuthorize("#holidayRequestDto.leader.username == authentication.name")
 	@PutMapping("/{id}")
-	public HolidayRequestDto allowedHolidayRequest(@PathVariable long id,  @RequestParam boolean allowed) {
+	public HolidayRequestDto allowedHolidayRequest(@PathVariable long id,  @RequestParam boolean allowed
+			, @RequestBody HolidayRequestDto holidayRequestDto) {
 		
 		HolidayRequest holidayRequest = getHolidayRequest(id);
 				
@@ -75,8 +79,9 @@ public class HolidayRequestController {
 		
 	}
 
+	@PreAuthorize("#holidayRequestDto.requestingEmployee.username == authentication.name")
 	@DeleteMapping("/{id}")
-	public void deleteHolidayRequest(@PathVariable long id) {
+	public void deleteHolidayRequest(@PathVariable long id, @RequestBody HolidayRequestDto holidayRequestDto) {
 		
 		HolidayRequest holidayRequest = getHolidayRequest(id);
 		

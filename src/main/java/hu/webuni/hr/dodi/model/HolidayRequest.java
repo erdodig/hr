@@ -29,7 +29,7 @@ public class HolidayRequest {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Employee requestingEmployee;
 	
-	private HolidayRequestState holidayRequestState;
+	private HolidayRequestState holidayRequestState = HolidayRequestState.REQUEST;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Employee leader;
@@ -42,7 +42,6 @@ public class HolidayRequest {
 		this.toDate = toDate;
 		this.requestTime = requestTime;
 		this.requestingEmployee = requestingEmployee;
-		this.holidayRequestState = HolidayRequestState.REQUEST;
 	}
 
 	public Long getId() {

@@ -48,10 +48,6 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 	@Override
 	public List<Employee> findAll() {		
 		List<Employee> employees = employeeRepository.findAll();
-//		for (Employee employee : employees) {
-//			employee.setCompany(companyRepository.findByIdWithEmployees(
-//					employee.getCompany().getId()).get());
-//		}
 		return employees;
 	}
 

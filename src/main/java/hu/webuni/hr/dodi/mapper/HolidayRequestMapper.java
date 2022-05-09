@@ -20,9 +20,13 @@ public interface HolidayRequestMapper {
 	@Mapping(source = "leader.entryDate", target = "leader.dateOfStartWork")
 	@Mapping(target = "requestingEmployee.company.companyType", ignore = true)
 	@Mapping(target = "leader.company.companyType", ignore = true)
+	@Mapping(target = "requestingEmployee.company.employees", ignore = true)
+	@Mapping(target = "leader.company.employees", ignore = true)
 	HolidayRequest dtoToHolidayRequest(HolidayRequestDto holidayRequestDto);
 
 	@InheritInverseConfiguration 
+	@Mapping(target = "requestingEmployee.company.employees", ignore = true)
+	@Mapping(target = "leader.company.employees", ignore = true)
 	HolidayRequestDto holidayRequestToDto(HolidayRequest holidayRequest);
 	
 	List<HolidayRequestDto> holidayRequestToDtos(List<HolidayRequest> holidayRequests);
