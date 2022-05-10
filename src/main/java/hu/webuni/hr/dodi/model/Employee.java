@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,6 +32,7 @@ public class Employee {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Position position;
 	
+	@Column(unique = true)
 	private String username;
 	
 	private String password;

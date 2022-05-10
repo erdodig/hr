@@ -49,18 +49,18 @@ public class InitDbService {
 		Position developer = positionRepository.save(new Position("fejlesztő", Qualification.UNIVERSITY));
 		Position tester = positionRepository.save(new Position("tesztelő", Qualification.HIGH_SCHOOL));
 
-		Employee newEmployee3 = new Employee(null, "Leader Péter",200000, LocalDateTime.now()
+		Employee newEmployee3 = new Employee(null, "Leader Péter",400000, LocalDateTime.now()
 				, "leader", passwordEncoder.encode("pass"), Set.of("admin", "user"), null);
 		newEmployee3.setPosition(developer);
 		employeeRepository.save(newEmployee3);
 		
-		Employee newEmployee1 = new Employee(null, "Kiss János", 200000, LocalDateTime.now()
+		Employee newEmployee1 = new Employee(null, "Kiss János", 300000, LocalDateTime.now()
 				, "kiss", passwordEncoder.encode("pass"), Set.of("user"), newEmployee3);
 		newEmployee1.setPosition(developer);
 		newEmployee1.setLeader(newEmployee3);
 		employeeRepository.save(newEmployee1);
 		
-		Employee newEmployee2 = new Employee(null, "Nagy János",200000, LocalDateTime.now()
+		Employee newEmployee2 = new Employee(null, "Nagy János",350000, LocalDateTime.now()
 				, "nagy", passwordEncoder.encode("pass"), Set.of("user"), newEmployee3);
 		newEmployee2.setPosition(tester);
 		newEmployee2.setLeader(newEmployee3);

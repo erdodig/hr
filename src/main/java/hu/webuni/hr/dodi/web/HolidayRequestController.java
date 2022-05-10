@@ -48,7 +48,7 @@ public class HolidayRequestController {
 	public HolidayRequestDto createOrModifyHolidayRequest(@RequestBody @Valid HolidayRequestDto holidayRequestDto) {
 		
 		if (holidayRequestDto.getFromDate().isAfter(holidayRequestDto.getToDate()))
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		
 		if (holidayRequestDto.getId() == null) 
 				return holidayRequestMapper.holidayRequestToDto(holidayRequestService
@@ -85,8 +85,10 @@ public class HolidayRequestController {
 		
 		HolidayRequest holidayRequest = getHolidayRequest(id);
 		
-		if (holidayRequest.getHolidayRequestState().equals(HolidayRequestState.REQUEST))		
-			holidayRequestService.delete(id);
+		if (!holidayRequest.getHolidayRequestState().equals(HolidayRequestState.REQUEST))		
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		
+		holidayRequestService.delete(id);
 	}
 	
 	private HolidayRequest getHolidayRequest(long id) {
