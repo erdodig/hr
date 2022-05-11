@@ -1,8 +1,12 @@
 package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,19 +32,43 @@ public class Employee {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Position position;
 	
+	@Column(unique = true)
+	private String username;
+	
+	private String password;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<String> roles = new HashSet<>();
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Employee leader;
+	
 	public Employee() {
 	}
 
+	public Employee(int salary, LocalDateTime dateOfStartWork) {
+		this.salary = salary;
+		this.dateOfStartWork = dateOfStartWork;
+	}
+
 	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork) {
+//		this(employeeId, name, salary, dateOfStartWork);
 		this.employeeId = employeeId;
 		this.name = name;
 		this.salary = salary;
 		this.dateOfStartWork = dateOfStartWork;
 	}
 
-	public Employee(int salary, LocalDateTime dateOfStartWork) {
+	public Employee(Long employeeId, String name, int salary, LocalDateTime dateOfStartWork, 
+			String username, String password, Set<String> roles, Employee leader) {
+		this.employeeId = employeeId;
+		this.name = name;
 		this.salary = salary;
 		this.dateOfStartWork = dateOfStartWork;
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+		this.leader = leader;
 	}
 
 	public Long getEmployeeId() {
@@ -89,6 +117,38 @@ public class Employee {
 
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
+	}
+
+	public Employee getLeader() {
+		return leader;
+	}
+
+	public void setLeader(Employee leader) {
+		this.leader = leader;
 	}
 
 	@Override
