@@ -4,7 +4,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class HrUserDetailsService implements UserDetailsService {
 	UserRepository userRepository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		Employee employee = userRepository.findByUsername(username)
 				.orElseThrow(() -> new  UsernameNotFoundException(username));
