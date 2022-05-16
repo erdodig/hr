@@ -79,9 +79,9 @@ public class HolidayRequestController {
 		
 	}
 
-	@PreAuthorize("#holidayRequestDto.requestingEmployee.username == authentication.name")
+//	@PreAuthorize("#holidayRequestDto.requestingEmployee.username == authentication.name")
 	@DeleteMapping("/{id}")
-	public void deleteHolidayRequest(@PathVariable long id, @RequestBody HolidayRequestDto holidayRequestDto) {
+	public void deleteHolidayRequest(@PathVariable long id/*, @RequestBody HolidayRequestDto holidayRequestDto*/) {
 		
 		HolidayRequest holidayRequest = getHolidayRequest(id);
 		

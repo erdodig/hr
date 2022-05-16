@@ -23,7 +23,7 @@ public class HrUserDetailsService implements UserDetailsService {
 		Employee employee = userRepository.findByUsername(username)
 				.orElseThrow(() -> new  UsernameNotFoundException(username));
 		
-		return new UserPrincipal(employee, employee.getRoles().stream()
+		return new UserPrincipal(employee, employee.getUsername(), employee.getPassword(), employee.getRoles().stream()
 				.map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 	}
 

@@ -3,6 +3,7 @@ package hu.webuni.hr.dodi.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,12 +51,12 @@ public class HolidayRequestService {
 
 	public HolidayRequest findById(long id) {
 		
-		HolidayRequest holidayRequest = holidayRequestRepository.findById(id).get();
+		Optional<HolidayRequest> holidayRequest = holidayRequestRepository.findById(id);
 		
-		if (holidayRequest == null)
+		if (holidayRequest.isEmpty() || holidayRequest == null)
 			return null;
 		
-		return holidayRequest;
+		return holidayRequest.get();
 	}
 
 	public void delete(long id) {

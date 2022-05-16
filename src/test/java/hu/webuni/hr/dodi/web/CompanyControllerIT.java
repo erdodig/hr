@@ -55,9 +55,9 @@ public class CompanyControllerIT {
 	
 	@BeforeEach
 	public void init() {
-		employeeRepository.deleteAll();
-		positionRepository.deleteAll();
-		companyRepository.deleteAll();
+//		employeeRepository.deleteAll();
+//		positionRepository.deleteAll();
+//		companyRepository.deleteAll();
 		initDB();
 	}
 	

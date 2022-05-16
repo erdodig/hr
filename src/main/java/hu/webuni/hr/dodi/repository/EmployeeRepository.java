@@ -2,6 +2,7 @@ package hu.webuni.hr.dodi.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +37,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
 	List<Employee> findByName(String name);
 
-	@EntityGraph(attributePaths = {"position","roles", "company"})
+	@EntityGraph(attributePaths = {"position", "roles", "company"})
 	@Override
 	public List<Employee> findAll();
 	
+	@EntityGraph(attributePaths = {"position", "roles", "company"})
+	@Override
+	public Optional<Employee> findById(Long id);
 }

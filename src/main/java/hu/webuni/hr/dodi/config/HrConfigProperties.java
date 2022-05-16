@@ -1,13 +1,23 @@
 package hu.webuni.hr.dodi.config;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.TreeMap;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import com.auth0.jwt.algorithms.Algorithm;
+
 @ConfigurationProperties(prefix = "hr")
 @Component
 public class HrConfigProperties {
+
+	private String secret;
+	private String alg;
+	private long validInMinutes;
+	private String issuer;
+	private Algorithm algorithm = null;
 
 	private Salary salary = new Salary();
 
@@ -17,6 +27,71 @@ public class HrConfigProperties {
 
 	public void setSalary(Salary salary) {
 		this.salary = salary;
+	}
+
+	public Algorithm getAlgorithm() {
+		
+		if (algorithm == null) {
+
+			switch (this.alg) {
+			case "HMAC256":
+				
+				algorithm = Algorithm.HMAC256(secret);
+				break;
+				
+			case "HMAC384":
+				
+				algorithm = Algorithm.HMAC384(secret);
+				break;
+				
+			case "HMAC512":
+				
+				algorithm = Algorithm.HMAC512(secret);
+				break;
+
+			default:
+				
+				throw new IllegalArgumentException("Nem támogatott titkosítás.");
+			}
+		}
+		
+		return algorithm;
+	}
+
+	public void setAlgorithm(Algorithm algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
+	public String getAlg() {
+		return alg;
+	}
+
+	public void setAlg(String alg) {
+		this.alg = alg;
+	}
+
+	public long getValidInMinutes() {
+		return validInMinutes;
+	}
+
+	public void setValidInMinutes(long validInMinutes) {
+		this.validInMinutes = validInMinutes;
+	}
+
+	public String getIssuer() {
+		return issuer;
+	}
+
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
 	}
 
 	public static class Salary {

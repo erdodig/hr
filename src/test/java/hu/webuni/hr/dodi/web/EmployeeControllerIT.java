@@ -33,8 +33,6 @@ public class EmployeeControllerIT {
 	private static final String BASE_URI = "/api/employees";
 	
 	private static Position position;
-	
-	private Company company2;
 
 	@Autowired
 	WebTestClient webTestClient;
@@ -244,8 +242,6 @@ public class EmployeeControllerIT {
 	void testFindEmployeesByDateOfStartWork() throws Exception {
 		
 		initDB();
-		
-		// 2015, 10, 1, 8, 0, 0
 		
 		Employee exampleEmployee = new Employee();
 		exampleEmployee.setDateOfStartWork(LocalDateTime.of(2015, 10, 1, 8, 0, 0));
