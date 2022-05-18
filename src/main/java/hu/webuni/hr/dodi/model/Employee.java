@@ -1,7 +1,9 @@
 package hu.webuni.hr.dodi.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -42,6 +44,9 @@ public class Employee {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Employee leader;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<Employee> employees = new ArrayList<>();
 	
 	public Employee() {
 	}
@@ -149,6 +154,21 @@ public class Employee {
 
 	public void setLeader(Employee leader) {
 		this.leader = leader;
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	public void addEmployee(Employee employee) {
+		employee.setLeader(this);
+		if(this.employees == null)
+			this.employees = new ArrayList<>();
+		this.employees.add(employee);		
 	}
 
 	@Override

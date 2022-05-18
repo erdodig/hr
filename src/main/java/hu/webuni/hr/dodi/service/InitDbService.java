@@ -48,23 +48,20 @@ public class InitDbService {
 		
 		Position developer = positionRepository.save(new Position("fejlesztő", Qualification.UNIVERSITY));
 		Position tester = positionRepository.save(new Position("tesztelő", Qualification.HIGH_SCHOOL));
-
-		Employee newEmployee3 = new Employee(null, "Leader Péter",400000, LocalDateTime.now()
-				, "leader", passwordEncoder.encode("pass"), Set.of("admin", "user"), null);
-		newEmployee3.setPosition(developer);
-		employeeRepository.save(newEmployee3);
 		
-		Employee newEmployee1 = new Employee(null, "Kiss János", 300000, LocalDateTime.now()
-				, "kiss", passwordEncoder.encode("pass"), Set.of("user"), newEmployee3);
+		Employee newEmployee1 = employeeRepository.save(new Employee(null, "Kiss János", 300000, LocalDateTime.now()
+				, "kiss", passwordEncoder.encode("pass"), Set.of("user"), null));
 		newEmployee1.setPosition(developer);
-		newEmployee1.setLeader(newEmployee3);
-		employeeRepository.save(newEmployee1);
 		
-		Employee newEmployee2 = new Employee(null, "Nagy János",350000, LocalDateTime.now()
-				, "nagy", passwordEncoder.encode("pass"), Set.of("user"), newEmployee3);
+		Employee newEmployee2 = employeeRepository.save(new Employee(null, "Nagy János",350000, LocalDateTime.now()
+				, "nagy", passwordEncoder.encode("pass"), Set.of("user"), null));
 		newEmployee2.setPosition(tester);
-		newEmployee2.setLeader(newEmployee3);
-		employeeRepository.save(newEmployee2);
+
+		Employee newEmployee3 = employeeRepository.save(new Employee(null, "Leader Péter",400000, LocalDateTime.now()
+				, "leader", passwordEncoder.encode("pass"), Set.of("admin", "user"), null));
+		newEmployee3.setPosition(developer);
+		newEmployee3.addEmployee(newEmployee2);
+		newEmployee3.addEmployee(newEmployee1);
 		
 		Company newCompany = companyRepository.save(new Company(null, 10, "Fa vágó Kft.", "", null));
 		newCompany.addEmployee(newEmployee3);
