@@ -1,7 +1,5 @@
 package hu.webuni.hr.dodi.config;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.TreeMap;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;

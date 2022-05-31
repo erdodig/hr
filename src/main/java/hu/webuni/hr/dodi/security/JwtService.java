@@ -72,6 +72,9 @@ public class JwtService {
 		
 		Employee employee = userRepository.findByUsername(decodedJwt.getSubject()).get();
 		
+//		Employee employee = new Employee();
+//		employee.setEmployeeId(decodedJwt.getClaim(EMPLOYEE_DATA).asMap());
+		
 		UserPrincipal userPrincipal = new UserPrincipal(employee, decodedJwt.getSubject(), employee.getPassword(), 
 				decodedJwt.getClaim(AUTH).asList(String.class)
 				.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
